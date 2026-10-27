@@ -90,7 +90,7 @@ const chapterQuizData = {
           "铝合金按成分和工艺特点分为铸造铝合金和变形铝合金两类，其中铸造铝合金应用更广泛"
         ],
         answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>铜及铜合金是有色金属中的考试重点。<strong>纯铜导电、导热性好，抗蚀、抗磁</strong>（属于抗磁性物质）。<br><br><strong>B错误：</strong>黄铜是以<strong>锌</strong>为主要合金元素的铜合金。<br><br><strong>C错误：</strong>白铜是以<strong>镍</strong>为主要合金元素的铜合金。<br><br><strong>D错误：</strong>铝合金按成分和工艺特点分为<strong>变形铝合金和铸造铝合金</strong>，表述正确，但"铸造铝合金应用更广泛"无此定论，教材强调的是变形铝合金应用更广泛。<br><br><strong>【考点归纳】</strong>有色金属重点：铜合金三大类——黄铜（锌）、青铜（锡/其他）、白铜（镍）；纯铜：导电导热+抗磁；铝合金分变形和铸造两类。<br><strong>【记忆口诀】</strong>黄铜加锌、白铜加镍、青铜加锡；纯铜导电又抗磁。"
+        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>铜及铜合金是有色金属中的考试重点。<strong>纯铜导电、导热性好，抗蚀、抗磁</strong>（属于抗磁性物质）。<br><br><strong>B错误：</strong>黄铜是以<strong>锌</strong>为主要合金元素的铜合金。<br><br><strong>C错误：</strong>白铜是以<strong>镍</strong>为主要合金元素的铜合金。<br><br><strong>D错误：</strong>铝合金按成分和工艺特点分为<strong>变形铝合金和铸造铝合金</strong>，表述正确，但「铸造铝合金应用更广泛「无此定论，教材强调的是变形铝合金应用更广泛。<br><br><strong>【考点归纳】</strong>有色金属重点：铜合金三大类——黄铜（锌）、青铜（锡/其他）、白铜（镍）；纯铜：导电导热+抗磁；铝合金分变形和铸造两类。<br><strong>【记忆口诀】</strong>黄铜加锌、白铜加镍、青铜加锡；纯铜导电又抗磁。"
       },
       {
         type: "single",
@@ -152,7 +152,7 @@ const chapterQuizData = {
           "钢制品"
         ],
         answer: [0, 1, 2, 4],
-        explanation: "<strong>正确答案：A、B、C、E</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、E正确：</strong>钢材按其使用可划分为<strong>型钢、板材、管材和钢制品</strong>四类。<br><br><strong>D错误：</strong>线材不属于按使用划分的类别。注意：教材原文为"钢材就其使用可划分为型钢、板材、管材和钢制品"，<strong>没有线材</strong>。<br><br><strong>【考点归纳】</strong>钢材四分法：型钢（H型钢、工字钢、槽钢等）、板材（厚板/中板/薄板）、管材（无缝钢管/焊接钢管等）、钢制品（焊条、管件、阀门等）。<br><strong>【记忆口诀】</strong>钢材使用四分类：型材板材加管材，还有钢制品。<br><strong>【易混淆点】</strong>容易多选"线材"，但教材明确四类不含线材。"
+        explanation: "<strong>正确答案：A、B、C、E</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、E正确：</strong>钢材按其使用可划分为<strong>型钢、板材、管材和钢制品</strong>四类。<br><br><strong>D错误：</strong>线材不属于按使用划分的类别。注意：教材原文为「钢材就其使用可划分为型钢、板材、管材和钢制品「，<strong>没有线材</strong>。<br><br><strong>【考点归纳】</strong>钢材四分法：型钢（H型钢、工字钢、槽钢等）、板材（厚板/中板/薄板）、管材（无缝钢管/焊接钢管等）、钢制品（焊条、管件、阀门等）。<br><strong>【记忆口诀】</strong>钢材使用四分类：型材板材加管材，还有钢制品。<br><strong>【易混淆点】</strong>容易多选「线材「，但教材明确四类不含线材。"
       },
 
       // ========== 二、非金属材料 ==========
@@ -184,7 +184,7 @@ const chapterQuizData = {
           "以上三种均不适用，应选用硬聚氯乙烯风管或采取其他防腐防排烟措施"
         ],
         answer: 3,
-        explanation: "<strong>正确答案：D</strong><br><br><strong>【解析】</strong><br><strong>D正确：</strong>本题综合考查非金属风管的适用范围。题干有三个关键条件：①中压（1200Pa属中压）→三种复合风管都能满足压力要求；②含酸性气体→酚醛、聚氨酯、玻璃纤维复合风管<strong>均不适用于酸碱性环境</strong>；③需要防排烟功能→三种复合风管<strong>均不适用于防排烟系统</strong>。因此三种复合风管都不适用，应考虑硬聚氯乙烯风管（适用于含酸碱排风）或采取其他防腐防排烟措施。<br><br><strong>A、B、C错误：</strong>虽然三种风管都能满足中压要求，但<strong>都不能同时满足耐酸碱和防排烟</strong>的要求。<br><br><strong>【考点归纳】</strong>非金属风管"不适用"条件是解题关键：酚醛/聚氨/玻璃纤维复合风管<strong>都不适用于防排烟系统</strong>；酚醛/聚氨/玻璃纤维<strong>都不适用于酸碱性环境</strong>。<br><strong>【命题思路】</strong>本题模仿真题综合判断题，先给出看似满足一个条件的选项，再用另一个不满足的条件排除，考查对风管适用范围的全面掌握。"
+        explanation: "<strong>正确答案：D</strong><br><br><strong>【解析】</strong><br><strong>D正确：</strong>本题综合考查非金属风管的适用范围。题干有三个关键条件：①中压（1200Pa属中压）→三种复合风管都能满足压力要求；②含酸性气体→酚醛、聚氨酯、玻璃纤维复合风管<strong>均不适用于酸碱性环境</strong>；③需要防排烟功能→三种复合风管<strong>均不适用于防排烟系统</strong>。因此三种复合风管都不适用，应考虑硬聚氯乙烯风管（适用于含酸碱排风）或采取其他防腐防排烟措施。<br><br><strong>A、B、C错误：</strong>虽然三种风管都能满足中压要求，但<strong>都不能同时满足耐酸碱和防排烟</strong>的要求。<br><br><strong>【考点归纳】</strong>非金属风管「不适用「条件是解题关键：酚醛/聚氨/玻璃纤维复合风管<strong>都不适用于防排烟系统</strong>；酚醛/聚氨/玻璃纤维<strong>都不适用于酸碱性环境</strong>。<br><strong>【命题思路】</strong>本题模仿真题综合判断题，先给出看似满足一个条件的选项，再用另一个不满足的条件排除，考查对风管适用范围的全面掌握。"
       },
       {
         type: "single",
@@ -199,7 +199,7 @@ const chapterQuizData = {
           "PP管不能用于流体输送"
         ],
         answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>聚丙烯管（PP管）用于流体输送，按压力分为Ⅰ、Ⅱ、Ⅲ型，其常温下的工作压力分别为<strong>0.4MPa、0.6MPa和0.8MPa</strong>。<br><br><strong>B干扰：</strong><strong>聚乙烯塑料管（PE管）</strong>无毒，可用于输送生活用水。PP管虽也可用于输送流体，但"无毒输送生活用水"是PE管的典型考点。<br><br><strong>C错误：</strong>聚丙烯（PP）属于<strong>热塑性塑料</strong>（聚乙烯、聚氯乙烯、聚丙烯、聚苯乙烯均为热塑性塑料），不是热固性塑料。<br><br><strong>D错误：</strong>PP管<strong>用于流体输送</strong>，题干已明确。<br><br><strong>【考点归纳】</strong>塑料水管：PE管（无毒、生活用水）；PP管（流体输送，分Ⅰ/Ⅱ/Ⅲ型，压力0.4/0.6/0.8MPa）；PVC-U管（建筑排水）；ABS管（耐腐蚀、耐温、耐冲击）。<br><strong>【记忆口诀】</strong>PE无毒喝口水，PP分三型压不同，PVC硬管排污水，ABS三耐工程用。"
+        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>聚丙烯管（PP管）用于流体输送，按压力分为Ⅰ、Ⅱ、Ⅲ型，其常温下的工作压力分别为<strong>0.4MPa、0.6MPa和0.8MPa</strong>。<br><br><strong>B干扰：</strong><strong>聚乙烯塑料管（PE管）</strong>无毒，可用于输送生活用水。PP管虽也可用于输送流体，但「无毒输送生活用水「是PE管的典型考点。<br><br><strong>C错误：</strong>聚丙烯（PP）属于<strong>热塑性塑料</strong>（聚乙烯、聚氯乙烯、聚丙烯、聚苯乙烯均为热塑性塑料），不是热固性塑料。<br><br><strong>D错误：</strong>PP管<strong>用于流体输送</strong>，题干已明确。<br><br><strong>【考点归纳】</strong>塑料水管：PE管（无毒、生活用水）；PP管（流体输送，分Ⅰ/Ⅱ/Ⅲ型，压力0.4/0.6/0.8MPa）；PVC-U管（建筑排水）；ABS管（耐腐蚀、耐温、耐冲击）。<br><strong>【记忆口诀】</strong>PE无毒喝口水，PP分三型压不同，PVC硬管排污水，ABS三耐工程用。"
       },
       {
         type: "single",
@@ -214,7 +214,7 @@ const chapterQuizData = {
           "酚醛塑料"
         ],
         answer: 3,
-        explanation: "<strong>正确答案：D</strong><br><br><strong>【解析】</strong><br><strong>D正确：</strong>热固性塑料：<strong>酚醛塑料、环氧塑料</strong>。热固性塑料加热固化后不能再软化重塑。<br><br><strong>A、B、C错误：</strong>聚乙烯、聚氯乙烯、聚丙烯均属于<strong>热塑性塑料</strong>。热塑性塑料加热可软化、可重塑。<br><br><strong>【考点归纳】</strong>热塑性塑料（加热可重塑）：聚乙烯PE、聚氯乙烯PVC、聚丙烯PP、聚苯乙烯PS。记忆："聚xx烯"带"烯"字的都是热塑性。<br>热固性塑料（加热固化不可重塑）：酚醛塑料、环氧塑料。<br><strong>【记忆口诀】</strong>热塑"聚烯"字带火（烯），热固酚醛环氧胶。"
+        explanation: "<strong>正确答案：D</strong><br><br><strong>【解析】</strong><br><strong>D正确：</strong>热固性塑料：<strong>酚醛塑料、环氧塑料</strong>。热固性塑料加热固化后不能再软化重塑。<br><br><strong>A、B、C错误：</strong>聚乙烯、聚氯乙烯、聚丙烯均属于<strong>热塑性塑料</strong>。热塑性塑料加热可软化、可重塑。<br><br><strong>【考点归纳】</strong>热塑性塑料（加热可重塑）：聚乙烯PE、聚氯乙烯PVC、聚丙烯PP、聚苯乙烯PS。记忆：「聚xx烯「带「烯「字的都是热塑性。<br>热固性塑料（加热固化不可重塑）：酚醛塑料、环氧塑料。<br><strong>【记忆口诀】</strong>热塑「聚烯「字带火（烯），热固酚醛环氧胶。"
       },
       {
         type: "single",
@@ -261,7 +261,7 @@ const chapterQuizData = {
           "聚氯乙烯管可用于输送生活饮用水"
         ],
         answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>聚乙烯塑料管（PE管）<strong>无毒</strong>，可用于输送生活用水。<br><strong>B正确：</strong>硬聚氯乙烯排水管及管件用于<strong>建筑工程排水</strong>，也可用于<strong>工业排水系统</strong>。<br><strong>C正确：</strong>ABS工程塑料管<strong>耐腐蚀、耐温、耐冲击</strong>（"三耐"），使用温度-20℃~70℃。<br><strong>D正确：</strong>PP管按压力分为Ⅰ、Ⅱ、Ⅲ型，常温工作压力分别为<strong>0.4、0.6、0.8MPa</strong>。<br><strong>E错误：</strong>聚氯乙烯管（PVC-U）用于<strong>建筑排水</strong>，不用于输送生活饮用水。"无毒输送生活用水"是<strong>PE管</strong>的专属考点。<br><br><strong>【考点归纳】</strong>塑料水管四兄弟：PE（无毒生活水）、PVC-U（建筑排水）、PP（流体输送分三型）、ABS（三耐工程管）。<br><strong>【易混淆点】</strong>E选项把PE管的"无毒生活用水"张冠李戴到PVC管上，是典型陷阱。"
+        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>聚乙烯塑料管（PE管）<strong>无毒</strong>，可用于输送生活用水。<br><strong>B正确：</strong>硬聚氯乙烯排水管及管件用于<strong>建筑工程排水</strong>，也可用于<strong>工业排水系统</strong>。<br><strong>C正确：</strong>ABS工程塑料管<strong>耐腐蚀、耐温、耐冲击</strong>（「三耐「），使用温度-20℃~70℃。<br><strong>D正确：</strong>PP管按压力分为Ⅰ、Ⅱ、Ⅲ型，常温工作压力分别为<strong>0.4、0.6、0.8MPa</strong>。<br><strong>E错误：</strong>聚氯乙烯管（PVC-U）用于<strong>建筑排水</strong>，不用于输送生活饮用水。「无毒输送生活用水「是<strong>PE管</strong>的专属考点。<br><br><strong>【考点归纳】</strong>塑料水管四兄弟：PE（无毒生活水）、PVC-U（建筑排水）、PP（流体输送分三型）、ABS（三耐工程管）。<br><strong>【易混淆点】</strong>E选项把PE管的「无毒生活用水「张冠李戴到PVC管上，是典型陷阱。"
       },
 
       // ========== 三、电工线材 ==========
@@ -293,7 +293,7 @@ const chapterQuizData = {
           "KVV型"
         ],
         answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong>VLV32、VV32型电缆（钢丝铠装）能承受机械外力作用，且可承受<strong>相当大的拉力</strong>，可敷设在<strong>竖井内、高层建筑的电缆竖井内</strong>，且适用于<strong>潮湿场所</strong>。数字"32"中"3"表示细圆钢丝铠装（承受大拉力），"2"表示聚氯乙烯外护套。<br><br><strong>A干扰：</strong>VLV、VV型电缆<strong>不能承受机械外力</strong>，适用于室内、隧道内及管道内敷设。<br><br><strong>B干扰：</strong>VLV22、VV22型电缆（钢带铠装）能承受<strong>机械外力</strong>但不能承受<strong>大的拉力</strong>，可敷设在地下。<br><br><strong>D干扰：</strong>KVV型为<strong>控制电缆</strong>，适用于室内各种敷设方式的控制电路中，不是电力电缆。<br><br><strong>【考点归纳】</strong>电缆型号后缀含义：22=钢带铠装（受外力、不受大拉力、可埋地）；32=钢丝铠装（受外力+受大拉力、可竖井敷设）；无后缀=不受机械外力（室内/隧道/管道）。<br><strong>【记忆口诀】</strong>22钢带埋地下，32钢丝竖井拉；无字只能室内放，KVV专管控制路。"
+        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong>VLV32、VV32型电缆（钢丝铠装）能承受机械外力作用，且可承受<strong>相当大的拉力</strong>，可敷设在<strong>竖井内、高层建筑的电缆竖井内</strong>，且适用于<strong>潮湿场所</strong>。数字「32「中「3「表示细圆钢丝铠装（承受大拉力），「2「表示聚氯乙烯外护套。<br><br><strong>A干扰：</strong>VLV、VV型电缆<strong>不能承受机械外力</strong>，适用于室内、隧道内及管道内敷设。<br><br><strong>B干扰：</strong>VLV22、VV22型电缆（钢带铠装）能承受<strong>机械外力</strong>但不能承受<strong>大的拉力</strong>，可敷设在地下。<br><br><strong>D干扰：</strong>KVV型为<strong>控制电缆</strong>，适用于室内各种敷设方式的控制电路中，不是电力电缆。<br><br><strong>【考点归纳】</strong>电缆型号后缀含义：22=钢带铠装（受外力、不受大拉力、可埋地）；32=钢丝铠装（受外力+受大拉力、可竖井敷设）；无后缀=不受机械外力（室内/隧道/管道）。<br><strong>【记忆口诀】</strong>22钢带埋地下，32钢丝竖井拉；无字只能室内放，KVV专管控制路。"
       },
       {
         type: "single",
@@ -370,7 +370,7 @@ const chapterQuizData = {
           "截面25mm²以上的多芯氧化镁电缆均由单芯电缆组成"
         ],
         answer: [0, 1, 2, 4],
-        explanation: "<strong>正确答案：A、B、C、E</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>氧化镁电缆优点：<strong>防水、防火、防爆</strong>。<br><strong>B正确：</strong>氧化镁电缆<strong>载流量大、耐高温</strong>，长期允许工作温度<strong>250℃</strong>。<br><strong>C正确：</strong>氧化镁电缆<strong>机械强度高、寿命长、接地性能好</strong>。<br><strong>D错误：</strong>氧化镁电缆的缺点是<strong>价格昂贵、工艺复杂、施工困难（硬）</strong>，不是"价格便宜、工艺简单、施工方便"。<br><strong>E正确：</strong>截面<strong>25mm²以上</strong>的多芯氧化镁电缆<strong>均由单芯电缆组成</strong>。<br><br><strong>【考点归纳】</strong>氧化镁电缆：优点（防水防火防爆+载流大耐高温250℃+强度高寿命长接地好）；缺点（贵+工艺复杂+施工困难硬+25mm²以上多芯均为单芯）。<br><strong>【记忆口诀】</strong>250斤的镁女：除了贵（价格昂贵），全是优点（防水防火防爆、载流大耐高温、强度高寿命长接地好）；25mm²以上多芯=单芯。"
+        explanation: "<strong>正确答案：A、B、C、E</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>氧化镁电缆优点：<strong>防水、防火、防爆</strong>。<br><strong>B正确：</strong>氧化镁电缆<strong>载流量大、耐高温</strong>，长期允许工作温度<strong>250℃</strong>。<br><strong>C正确：</strong>氧化镁电缆<strong>机械强度高、寿命长、接地性能好</strong>。<br><strong>D错误：</strong>氧化镁电缆的缺点是<strong>价格昂贵、工艺复杂、施工困难（硬）</strong>，不是「价格便宜、工艺简单、施工方便「。<br><strong>E正确：</strong>截面<strong>25mm²以上</strong>的多芯氧化镁电缆<strong>均由单芯电缆组成</strong>。<br><br><strong>【考点归纳】</strong>氧化镁电缆：优点（防水防火防爆+载流大耐高温250℃+强度高寿命长接地好）；缺点（贵+工艺复杂+施工困难硬+25mm²以上多芯均为单芯）。<br><strong>【记忆口诀】</strong>250斤的镁女：除了贵（价格昂贵），全是优点（防水防火防爆、载流大耐高温、强度高寿命长接地好）；25mm²以上多芯=单芯。"
       },
       {
         type: "multi",

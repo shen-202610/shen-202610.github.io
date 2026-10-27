@@ -650,7 +650,7 @@ function renderQuiz(){
   // 按钮
   const cBtn=document.getElementById('confirmBtn');
   if(revealed[q.id]){cBtn.style.display='none';}
-  else{cBtn.style.display='block';cBtn.disabled=my.length<=(q.type==='multiple'?2:1)||(q.type==='single'&&my.length<1);cBtn.textContent=q.type==='multiple'?'确认提交（已选 '+my.length+' 项）':'确认提交';}
+  else{cBtn.style.display='block';cBtn.disabled=my.length<(q.type==='multiple'?2:1);cBtn.textContent=q.type==='multiple'?'确认提交（已选 '+my.length+' 项）':'确认提交';}
   // 进度
   document.getElementById('cnt').textContent=(mode==='section'?'本节 ':'错题 ')+'第 '+(curIdx+1)+' / '+list.length+' 题';
   document.getElementById('pLabel').textContent=(mode==='section'?(curSec+' '+d.sectionName):'错题重练 · 来自已掌握章节的错题');
@@ -703,9 +703,9 @@ function confirmAnswer(){
   // 自动翻下一题（延迟一小会儿让用户看到解析与变色）
   const list=curList();
   if(curIdx<list.length-1){
-    setTimeout(()=>{curIdx++;renderQuiz();window.scrollTo(0,0);},700);
+    const nxt=curIdx+1;setTimeout(()=>{if(curIdx===nxt-1){curIdx=nxt;renderQuiz();window.scrollTo(0,0);}},700);
   }else{
-    setTimeout(()=>finishSection(),800);
+    setTimeout(()=>{if(curIdx===list.length-1)finishSection();},800);
   }
 }
 function finishSection(){
@@ -794,6 +794,7 @@ function showResult(score,right,total,q){
 
 /* ================= 错题本 ================= */
 function renderWrong(){
+  rebuildWrongs(); save();
   const box=document.getElementById('v-wrong');
   const list=Object.keys(store.wrongs).map(k=>JSON.parse(store.wrongs[k]));
   if(!list.length){

@@ -1,0 +1,23 @@
+{
+  "name": "二建每日冲刺练",
+  "short_name": "二建刷题",
+  "description": "二级建造师机电工程管理与实务每日练习题，贴合教材、难度分级、自动评分",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a73e8",
+  "theme_color": "#1a73e8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "productivity"]
+}

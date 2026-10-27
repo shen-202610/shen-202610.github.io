@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a73e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="二建每日练">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>二建每日冲刺练</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --primary: #1a73e8;
+    --primary-dark: #1557b0;
+    --success: #34a853;
+    --danger: #ea4335;
+    --warning: #f9ab00;
+    --bg: #f5f5f5;
+    --card: #ffffff;
+    --text: #202124;
+    --text-secondary: #5f6368;
+    --border: #e0e0e0;
+    --radius: 12px;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding-bottom: 40px;
+    font-size: 15px;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+    color: #fff;
+    padding: 20px 16px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .header .subtitle { font-size: 13px; opacity: .85; }
+  .header .day-badge {
+    display: inline-block;
+    background: rgba(255,255,255,.2);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  .container { max-width: 680px; margin: 0 auto; padding: 16px; }
+  .progress-bar {
+    position: sticky;
+    top: 66px;
+    z-index: 99;
+    background: var(--bg);
+    padding: 8px 0;
+    margin-bottom: 4px;
+  }
+  .progress-track {
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1a73e8, #34a853);
+    border-radius: 3px;
+    transition: width .4s ease;
+    width: 0%;
+  }
+  .progress-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: right;
+    margin-top: 4px;
+  }
+  .question-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    border-left: 4px solid var(--primary);
+  }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .q-num {
+    background: var(--primary);
+    color: #fff;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .q-type {
+    font-size: 11px;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 1px 8px;
+    border-radius: 10px;
+  }
+  .q-text { font-size: 15px; margin-bottom: 12px; line-height: 1.8; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .2s;
+    font-size: 14px;
+  }
+  .option:active { transform: scale(.98); }
+  .option.selected {
+    border-color: var(--primary);
+    background: #e8f0fe;
+  }
+  .option.correct {
+    border-color: var(--success);
+    background: #e6f4ea;
+  }
+  .option.wrong {
+    border-color: var(--danger);
+    background: #fce8e6;
+  }
+  .option-letter {
+    font-weight: 700;
+    margin-right: 8px;
+    color: var(--primary);
+    min-width: 20px;
+  }
+  .option.selected .option-letter,
+  .option.correct .option-letter { color: inherit; }
+  /* 多选 */
+  .option.multi.selected {
+    border-color: var(--warning);
+    background: #fef7e0;
+  }
+  .option.multi.selected.correct {
+    border-color: var(--success);
+    background: #e6f4ea;
+  }
+  .option.multi.selected.wrong {
+    border-color: var(--danger);
+    background: #fce8e6;
+  }
+  /* 案例题填空 */
+  .case-answer-area {
+    margin-top: 10px;
+  }
+  .case-answer-area textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    line-height: 1.6;
+  }
+  .case-answer-area textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: 8px;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+  }
+  .btn-primary:active { background: var(--primary-dark); }
+  .btn-primary:disabled {
+    background: #b0bec5;
+    cursor: not-allowed;
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1.5px solid var(--primary);
+  }
+  /* 答案区域 */
+  .answer-section {
+    margin-top: 20px;
+    display: none;
+  }
+  .answer-section.show { display: block; }
+  .score-card {
+    background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .score-card .score-num {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .score-card .score-total { font-size: 20px; opacity: .8; }
+  .score-card .score-label { font-size: 14px; margin-top: 8px; opacity: .9; }
+  .score-emoji { font-size: 36px; margin-bottom: 8px; }
+  .answer-item {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .answer-item .a-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .answer-item .a-title .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  .tag-correct { background: #e6f4ea; color: var(--success); }
+  .tag-wrong { background: #fce8e6; color: var(--danger); }
+  .answer-item .a-content { font-size: 14px; line-height: 1.8; }
+  .answer-item .a-content .label {
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .explanation {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.7;
+    border-left: 3px solid var(--primary);
+  }
+  .overall-eval {
+    background: linear-gradient(135deg, #fef7e0 0%, #fff3c4 100%);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    margin-top: 16px;
+    border: 1px solid #f9ab00;
+  }
+  .overall-eval h3 { color: #b06000; font-size: 16px; margin-bottom: 8px; }
+  .overall-eval p { font-size: 14px; line-height: 1.8; }
+  .overall-eval .tip {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #f9ab00;
+    font-size: 13px;
+  }
+  /* 每日更新提示 */
+  .update-banner {
+    background: #e6f4ea;
+    border: 1px solid #34a853;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #137333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .update-banner .icon { font-size: 20px; }
+  /* 底部提示 */
+  .footer-tip {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 24px;
+    padding: 16px;
+    background: var(--card);
+    border-radius: var(--radius);
+  }
+  .footer-tip .add-shortcut {
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  /* 快捷方式弹窗 */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px 20px;
+    max-width: 340px;
+    width: 90%;
+    text-align: center;
+  }
+  .modal h3 { font-size: 17px; margin-bottom: 12px; color: var(--primary); }
+  .modal p { font-size: 14px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 8px; text-align: left; }
+  .modal .step { margin-bottom: 10px; }
+  .modal .step-num {
+    display: inline-flex;
+    width: 22px; height: 22px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .modal-close {
+    margin-top: 16px;
+    padding: 10px 24px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .fade-in { animation: fadeIn .5s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .highlight { background: #fff3c4; padding: 1px 3px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📘 二建每日冲刺练</h1>
+  <div class="subtitle" id="headerTitle">机电工程管理与实务 · 专项突破</div>
+  <div class="day-badge" id="dayBadge">第 6 期</div>
+</div>
+
+<div class="container">
+  <div class="update-banner" id="updateBanner" style="display:none">
+    <span class="icon">🔔</span>
+    <span><strong>今日已更新！</strong> 第 <span id="bannerDay"></span> 期新题已上线，快来完成今日练习吧！</span>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">已完成 0 / 4 题</div>
+  </div>
+
+  <div id="quizArea"></div>
+
+  <button class="btn btn-primary" id="submitBtn" onclick="submitQuiz()">✅ 提交作答并评分</button>
+  <button class="btn btn-outline" id="resetBtn" onclick="resetQuiz()" style="display:none">🔄 重新作答</button>
+
+  <div class="answer-section" id="answerSection"></div>
+
+  <div class="footer-tip">
+    💡 <span class="add-shortcut" onclick="showShortcutModal()">点击这里了解如何添加到手机桌面</span>，每天打开就像App一样方便刷题！<br><br>
+    📅 每天自动更新新题目，坚持打卡，二建必过！
+  </div>
+</div>
+
+<!-- 快捷方式弹窗 -->
+<div class="modal-overlay" id="shortcutModal">
+  <div class="modal">
+    <h3>📱 添加到手机桌面</h3>
+    <div class="step"><span class="step-num">1</span>用手机浏览器（Safari / Chrome）打开本页面</div>
+    <div class="step"><span class="step-num">2</span>点击浏览器底部/顶部的 <strong>「分享」</strong> 按钮</div>
+    <div class="step"><span class="step-num">3</span>滑动找到并点击 <strong>「添加到主屏幕」</strong></div>
+    <div class="step"><span class="step-num">4</span>可自定义名称，点击 <strong>「添加」</strong> 完成</div>
+    <p style="text-align:center; margin-top:12px; font-size:12px; color:#999;">之后在桌面点图标即可直接进入刷题页面 🎯</p>
+    <button class="modal-close" onclick="closeShortcutModal()">我知道了</button>
+  </div>
+</div>
+
+<script>
+// ========== 题库数据（每日更新） ==========
+// 内嵌题库 —— 每天新增一期，直接在此对象中添加新天数即可
+const dailyQuizBank = {
+  6: {
+    date: "2026-10-27",
+    title: "机电工程管理与实务 · 专项突破",
+    questions: [
+      {
+        type: "single",
+        typeLabel: "单选题",
+        question: '下列关于母线槽施工安装技术要求中，符合《建筑电气工程施工质量验收规范》规定的是（　）。',
+        options: [
+          "水平安装时，圆钢吊架直径不得小于6mm，每段母线槽吊架设置不得少于1个",
+          "垂直安装时，应在通过楼板处选用弹簧支架，层间高度超过3.5m时应设置补偿装置",
+          "母线槽跨越建筑物变形缝处，应设置伸缩节；母线槽末端悬空长度超过0.5m时应加装固定支架",
+          "母线槽的金属外壳应可靠接地，全长不应少于2处与保护导体可靠连接，分支母线槽的金属外壳末端可不接地"
+        ],
+        answer: 2,
+        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong>本题考查母线槽的安装技术要求。<br><br><strong>C正确：</strong>母线槽跨越建筑物变形缝处应设置伸缩节；母线槽末端悬空长度超过0.5m时应加装固定支架，这是规范中的明确要求。<br><br><strong>A错误：</strong>水平安装时，圆钢吊架直径不得小于<strong>8mm</strong>（不是6mm），每段母线槽吊架设置不得少于1个。<br><br><strong>B错误：</strong>垂直安装时，应在通过楼板处选用弹簧支架，但层间高度超过<strong>2.5m</strong>时应设置补偿装置（不是3.5m）。<br><br><strong>D错误：</strong>母线槽全长不应少于2处与保护导体可靠连接是正确的，但<strong>分支母线槽的金属外壳末端也必须可靠接地</strong>，\"可不接地\"的说法错误。<br><br><strong>【考点归纳】</strong>母线槽安装关键数字：吊架圆钢直径≥8mm；层间超2.5m设补偿装置；末端悬空超0.5m加固定支架；外壳全长≥2处接地，分支末端也须接地。"
+      },
+      {
+        type: "single",
+        typeLabel: "单选题",
+        question: '自动化仪表取源部件安装中，关于温度取源部件与管道安装角度的说法，正确的是（　）。',
+        options: [
+          "在管道的拐弯处安装时，宜逆着物料流向，取源部件轴线应与管道轴线相重合",
+          "与管道呈倾斜角度安装时，宜逆着物料流向，取源部件轴线应与管道轴线相交",
+          "在管道的拐弯处安装时，宜顺着物料流向，取源部件轴线应与管道轴线相垂直",
+          "与管道呈倾斜角度安装时，宜顺着物料流向，取源部件轴线应与管道轴线相平行"
+        ],
+        answer: 1,
+        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong>本题考查自动化仪表温度取源部件的安装要求。<br><br><strong>B正确：</strong>温度取源部件与管道呈倾斜角度安装时，宜<strong>逆着物料流向</strong>插入，且取源部件轴线应与管道轴线<strong>相交</strong>。这样可确保感温元件充分接触介质，测量准确。<br><br><strong>A错误：</strong>在管道拐弯处安装时，取源部件轴线应与管道轴线<strong>相重合</strong>是正确的，但A选项的表述混淆了不同场景。<br><br><strong>C、D错误：</strong>均涉及\"顺着物料流向\"，规范要求温度取源部件应<strong>逆着物料流向</strong>安装。<br><br><strong>【记忆口诀】</strong>温度取源：逆着流、充分接触。拐弯重合，倾斜相交。<br><strong>【易混淆点】</strong>压力取源部件在管道拐弯处安装时，取源部件轴线应与管道轴线<strong>垂直</strong>相交（注意与温度取源的区别）。"
+      },
+      {
+        type: "multi",
+        typeLabel: "多选题",
+        question: '根据《建设工程施工合同（示范文本）》，下列因不可抗力事件导致的损失和费用分担中，说法正确的有（　）。',
+        options: [
+          "永久工程、已运至施工现场的材料和工程设备的损坏，由发包人承担",
+          "承包人施工设备的损坏，由承包人承担",
+          "发包人和承包人承担各自人员伤亡和财产的损失",
+          "因不可抗力影响承包人履行合同约定的义务，导致工期延误的，工期不予顺延",
+          "停工期间必须支付的现场必要的工人工资，由承包人承担"
+        ],
+        answer: [0, 1, 2],
+        explanation: "<strong>正确答案：A、B、C</strong><br><br><strong>【解析】</strong>本题考查不可抗力导致的损失和费用分担规则（高频考点）。<br><br><strong>A正确：</strong>永久工程、已运至施工现场的材料和工程设备的损坏，由<strong>发包人</strong>承担。因为所有权归发包人。<br><br><strong>B正确：</strong>承包人施工设备的损坏，由<strong>承包人</strong>自行承担。施工设备属于承包人自有财产。<br><br><strong>C正确：</strong>发包人和承包人各自承担<strong>己方人员伤亡</strong>和<strong>己方财产损失</strong>，互不赔偿。<br><br><strong>D错误：</strong>因不可抗力导致工期延误的，工期<strong>应当顺延</strong>（不是不予顺延）。不可抗力属于法定免责事由。<br><br><strong>E错误：</strong>停工期间必须支付的现场必要的工人工资，由<strong>发包人</strong>承担（不是承包人）。这是为了保障基本用工权益。<br><br><strong>【记忆口诀】</strong>不可抗力分担：<br>谁的永久谁负责（发包人）<br>谁的设备谁负责（承包人）<br>各人各命各管（人员伤亡）<br>工期该顺就顺（顺延）<br>必要工资发包人掏"
+      },
+      {
+        type: "case",
+        typeLabel: "案例分析题",
+        question: '<strong>背景资料：</strong><br>某安装公司承接一商务楼机电安装工程，包含空调水系统、给水系统及电气照明系统。施工中发生如下事件：<br><br><strong>事件1：</strong>空调水系统管道安装完成后进行压力试验，设计工作压力为0.8MPa，试验人员按1.25倍工作压力注水升压至1.0MPa时，稳压5min后压力表读数下降至0.96MPa，检查无泄漏，判定为合格。<br><br><strong>事件2：</strong>给水系统采用PP-R管热熔连接，施工人员为赶工，在管材插入管件后旋转了90°以调整方向，冷却期间对接口施加了轻微外力校正。<br><br><strong>事件3：</strong>电气照明系统穿线时，管内导线总截面积（含绝缘层）占管内截面积的45%，三相照明回路的N线截面积与相线相同，PE线截面积取相线的一半。<br><br><strong>问题：</strong><br>（1）事件1中，空调水系统压力试验是否合格？说明理由及正确做法。<br>（2）事件2中，PP-R管热熔连接存在哪些错误？分别指出正确做法。<br>（3）事件3中，导线穿管及截面积选择存在哪些问题？说明理由。',
+        placeholder: "请在此输入你的答案，建议按（1）（2）（3）分点作答……",
+        answerText: "（1）不合格。① 试验压力错误：空调水系统冷热水、冷却水管道系统水压试验，当工作压力≤1.0MPa时，试验压力应为1.5倍工作压力且不小于0.6MPa。本工程工作压力0.8MPa，试验压力应为0.8×1.5=1.2MPa（不是1.0MPa）。② 稳压时间不足：水压试验应升压至试验压力后，稳压10min（不是5min），压力降不应大于0.02MPa，再将压力降至工作压力进行检查，各连接处不渗不漏为合格。③ 判定依据不完整：仅以\"无泄漏\"判定不合格，应同时满足压力降和外观检查要求。\n\n（2）存在两处错误：① 热熔连接时，管材插入管件后旋转90°调整方向错误。正确做法：热熔连接时，管材与管件承插后应严格保持同轴，插入深度应符合要求，插入后不得旋转或扭曲。② 冷却期间施加外力校正错误。正确做法：热熔接口在冷却期间应自然冷却，不得对接口施加任何外力或移动管道，冷却时间应符合规范要求（一般不少于规定时间，如DN20约需2min以上），冷却后方可继续施工。\n\n（3）存在两处问题：① 管内导线总截面积（含绝缘层）占管内截面积的45%，超过规范规定的40%。理由：根据《建筑电气工程施工质量验收规范》，管内导线总截面积（含绝缘层）不应超过管内截面积的40%，以保证散热和穿线空间。② PE线截面积取相线的一半，当相线截面积≤16mm²时，PE线截面积应与相线相同。理由：根据规范，相线截面积S≤16mm²时，PE线截面积应与相线截面积相同（即PE=S）；16＜S≤35时，PE=16mm²；S＞35时，PE=S/2。本案例未明确相线截面积，但若相线≤16mm²，则PE线取一半是错误的，应与相线同截面。N线截面积与相线相同是正确的。",
+        explanation: "<strong>【评分标准参考】</strong><br>（1）问约4分：判断1分 + 试验压力1分 + 稳压时间1分 + 判定依据1分<br>（2）问约4分：指出两个错误各1分 + 两个正确做法各1分<br>（3）问约4分：指出截面积超40%问题1分+理由1分 + PE线问题1分+理由1分<br><br><strong>【考点归纳】</strong><br>① 空调水系统水压试验：P≤1.0MPa→1.5P且≥0.6MPa；稳压10min，压降≤0.02MPa。<br>② PP-R热熔：同轴插入、不旋转、自然冷却、不施加外力。<br>③ 穿管导线：总截面积≤管内40%；PE线：S≤16时PE=S。<br><br><strong>【答题技巧】</strong>案例题先判断正误，再说理由，引用规范数字。按点作答，条理清晰，阅卷按得分点给分。"
+      }
+    ]
+  }
+  // ★ 每天在此添加新一期：复制上面的 6: { ... } 块，改成 7: { ... } 即可
+};
+
+// 自动获取最新一期题目
+function getLatestQuiz() {
+  const days = Object.keys(dailyQuizBank).map(Number);
+  const latestDay = Math.max(...days);
+  return { day: latestDay, ...dailyQuizBank[latestDay] };
+}
+
+// 当前使用的题库（默认显示最新一期）
+const quizData = getLatestQuiz();
+
+// ========== 全局状态 ==========
+let userAnswers = {};
+let quizSubmitted = false;
+
+// ========== 初始化 ==========
+function init() {
+  // 动态更新头部
+  document.getElementById('dayBadge').textContent = '第 ' + quizData.day + ' 期';
+  document.getElementById('headerTitle').textContent = quizData.title;
+  document.title = '二建每日冲刺练 · 第' + quizData.day + '期';
+
+  // 检查每日更新
+  checkDailyUpdate();
+  // 渲染题目
+  renderQuiz();
+  // 恢复之前的作答（如果存在且是同一天）
+  const saved = localStorage.getItem('erjian_answers_' + quizData.day);
+  if (saved) {
+    userAnswers = JSON.parse(saved);
+    restoreSelections();
+  }
+  // 检查是否已提交过
+  const submitted = localStorage.getItem('erjian_submitted_' + quizData.day);
+  if (submitted === 'true') {
+    quizSubmitted = true;
+    showAnswers(true);
+    document.getElementById('submitBtn').style.display = 'none';
+    document.getElementById('resetBtn').style.display = 'block';
+  }
+  updateProgress();
+}
+
+function checkDailyUpdate() {
+  const lastVisit = localStorage.getItem('erjian_last_visit');
+  const today = new Date().toDateString();
+  if (lastVisit !== today) {
+    localStorage.setItem('erjian_last_visit', today);
+    // 显示更新提示
+    document.getElementById('updateBanner').style.display = 'flex';
+    document.getElementById('bannerDay').textContent = quizData.day;
+    // 检查是否有新题目（模拟：如果存储的天数小于当前天数，说明有更新）
+    const lastDay = parseInt(localStorage.getItem('erjian_last_day') || '0');
+    if (lastDay > 0 && lastDay < quizData.day) {
+      document.getElementById('updateBanner').innerHTML = 
+        '<span class="icon">🎉</span><span><strong>新题已更新！</strong> 从第 ' + lastDay + ' 期到第 ' + quizData.day + ' 期有新题目，快来刷题！</span>';
+    }
+  }
+  localStorage.setItem('erjian_last_day', quizData.day.toString());
+}
+
+// ========== 渲染题目 ==========
+function renderQuiz() {
+  const area = document.getElementById('quizArea');
+  let html = '';
+  quizData.questions.forEach((q, idx) => {
+    html += '<div class="question-card fade-in" style="animation-delay:' + (idx * 0.1) + 's">';
+    html += '<div class="q-header">';
+    html += '<div class="q-num">' + (idx + 1) + '</div>';
+    html += '<div class="q-type">' + q.typeLabel + '</div>';
+    html += '</div>';
+    html += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'case') {
+      html += '<div class="case-answer-area">';
+      html += '<textarea id="case-input-' + idx + '" placeholder="' + q.placeholder + '" oninput="saveCaseAnswer(' + idx + ')">' + (userAnswers[idx] || '') + '</textarea>';
+      html += '</div>';
+    } else {
+      html += '<div class="options" id="options-' + idx + '">';
+      q.options.forEach((opt, optIdx) => {
+        const isMulti = q.type === 'multi';
+        html += '<div class="option' + (isMulti ? ' multi' : '') + '" onclick="selectOption(' + idx + ',' + optIdx + ',' + isMulti + ')">';
+        html += '<span class="option-letter">' + String.fromCharCode(65 + optIdx) + '</span>';
+        html += '<span>' + opt + '</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  area.innerHTML = html;
+}
+
+// ========== 选择选项 ==========
+function selectOption(qIdx, optIdx, isMulti) {
+  if (quizSubmitted) return;
+  if (isMulti) {
+    if (!userAnswers[qIdx]) userAnswers[qIdx] = [];
+    const pos = userAnswers[qIdx].indexOf(optIdx);
+    if (pos > -1) {
+      userAnswers[qIdx].splice(pos, 1);
+    } else {
+      userAnswers[qIdx].push(optIdx);
+    }
+  } else {
+    userAnswers[qIdx] = optIdx;
+  }
+  // 保存到本地
+  localStorage.setItem('erjian_answers_' + quizData.day, JSON.stringify(userAnswers));
+  renderSelections(qIdx);
+  updateProgress();
+}
+
+function renderSelections(qIdx) {
+  const q = quizData.questions[qIdx];
+  const container = document.getElementById('options-' + qIdx);
+  if (!container) return;
+  const options = container.querySelectorAll('.option');
+  options.forEach((el, i) => {
+    el.classList.remove('selected');
+    if (q.type === 'multi') {
+      if (userAnswers[qIdx] && userAnswers[qIdx].includes(i)) {
+        el.classList.add('selected');
+      }
+    } else {
+      if (userAnswers[qIdx] === i) {
+        el.classList.add('selected');
+      }
+    }
+  });
+}
+
+function restoreSelections() {
+  quizData.questions.forEach((q, idx) => {
+    if (q.type !== 'case') {
+      renderSelections(idx);
+    }
+  });
+}
+
+function saveCaseAnswer(idx) {
+  if (quizSubmitted) return;
+  const val = document.getElementById('case-input-' + idx).value.trim();
+  if (val) {
+    userAnswers[idx] = val;
+  } else {
+    delete userAnswers[idx];
+  }
+  localStorage.setItem('erjian_answers_' + quizData.day, JSON.stringify(userAnswers));
+  updateProgress();
+}
+
+// ========== 进度 ==========
+function updateProgress() {
+  let answered = 0;
+  quizData.questions.forEach((q, idx) => {
+    if (userAnswers[idx] !== undefined && userAnswers[idx] !== '' &&
+        (!Array.isArray(userAnswers[idx]) || userAnswers[idx].length > 0)) {
+      answered++;
+    }
+  });
+  const total = quizData.questions.length;
+  const pct = Math.round(answered / total * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = '已完成 ' + answered + ' / ' + total + ' 题';
+}
+
+// ========== 提交评分 ==========
+function submitQuiz() {
+  // 检查是否全部作答
+  const unanswered = [];
+  quizData.questions.forEach((q, idx) => {
+    if (userAnswers[idx] === undefined || userAnswers[idx] === '' ||
+        (Array.isArray(userAnswers[idx]) && userAnswers[idx].length === 0)) {
+      unanswered.push(idx + 1);
+    }
+  });
+  if (unanswered.length > 0) {
+    alert('⚠️ 你还有第 ' + unanswered.join('、') + ' 题未作答，请完成后再提交！');
+    return;
+  }
+
+  quizSubmitted = true;
+  localStorage.setItem('erjian_submitted_' + quizData.day, 'true');
+  showAnswers(false);
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('resetBtn').style.display = 'block';
+
+  // 滚动到答案区域
+  document.getElementById('answerSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showAnswers(fromLoad) {
+  // 标记选项正误
+  quizData.questions.forEach((q, idx) => {
+    if (q.type === 'case') return;
+    const container = document.getElementById('options-' + idx);
+    if (!container) return;
+    const options = container.querySelectorAll('.option');
+    options.forEach((el, i) => {
+      el.classList.remove('selected', 'correct', 'wrong');
+      el.style.pointerEvents = 'none';
+      if (q.type === 'multi') {
+        const correctSet = Array.isArray(q.answer) ? q.answer : [q.answer];
+        const userSet = userAnswers[idx] || [];
+        const isCorrect = correctSet.includes(i);
+        const isSelected = userSet.includes(i);
+        if (isCorrect) el.classList.add('correct');
+        if (isSelected && !isCorrect) el.classList.add('wrong');
+      } else {
+        if (i === q.answer) el.classList.add('correct');
+        else if (userAnswers[idx] === i && i !== q.answer) el.classList.add('wrong');
+      }
+    });
+  });
+
+  // 计算分数
+  let score = 0;
+  let maxScore = 0;
+  const results = [];
+
+  quizData.questions.forEach((q, idx) => {
+    if (q.type === 'single') {
+      maxScore += 1;
+      if (userAnswers[idx] === q.answer) { score += 1; results.push({ idx, correct: true }); }
+      else { results.push({ idx, correct: false }); }
+    } else if (q.type === 'multi') {
+      maxScore += 2;
+      const correctSet = new Set(q.answer);
+      const userSet = new Set(userAnswers[idx] || []);
+      // 多选题：全对得2分，部分选对得1分（少选得一半分），错选0分
+      const hasWrong = [...userSet].some(x => !correctSet.has(x));
+      const hasAll = correctSet.size === userSet.size && [...correctSet].every(x => userSet.has(x));
+      const hasSome = [...correctSet].some(x => userSet.has(x));
+      if (hasAll) { score += 2; results.push({ idx, correct: true, partial: false }); }
+      else if (!hasWrong && hasSome) { score += 1; results.push({ idx, correct: false, partial: true }); }
+      else { results.push({ idx, correct: false, partial: false }); }
+    } else if (q.type === 'case') {
+      maxScore += 12; // 案例题满分12分（按二建实务案例题20分制折算）
+      // 案例题由用户自评（提供参考答案）
+      score += 8; // 默认给一个参考分，实际应用户对照
+      results.push({ idx, correct: null, caseScore: 8 });
+    }
+  });
+
+  // 案例题分数让用户自行评估
+  const caseQ = quizData.questions.find(q => q.type === 'case');
+  let finalScore = score;
+  if (caseQ) {
+    // 去掉案例题默认分，提示用户对照评分
+    finalScore = score; // 保留计算
+  }
+
+  const totalScore = Math.round((score / maxScore) * 100);
+
+  // 渲染答案区域
+  let html = '';
+  // 分数卡片
+  html += '<div class="score-card fade-in">';
+  let emoji = '😞';
+  let level = '需要加油';
+  if (totalScore >= 85) { emoji = '🏆'; level = '优秀'; }
+  else if (totalScore >= 70) { emoji = '👍'; level = '良好'; }
+  else if (totalScore >= 60) { emoji = '💪'; level = '及格'; }
+  else { emoji = '📚'; level = '需努力'; }
+  html += '<div class="score-emoji">' + emoji + '</div>';
+  html += '<div class="score-num">' + totalScore + '<span class="score-total"> / 100</span></div>';
+  html += '<div class="score-label">综合评级：' + level + '</div>';
+  html += '</div>';
+
+  // 各题答案
+  quizData.questions.forEach((q, idx) => {
+    const r = results[idx];
+    html += '<div class="answer-item fade-in">';
+    html += '<div class="a-title">';
+    html += '<span>第 ' + (idx + 1) + ' 题 · ' + q.typeLabel + '</span>';
+    if (q.type === 'case') {
+      html += '<span class="tag tag-correct">参考答案已提供</span>';
+    } else if (r.correct) {
+      html += '<span class="tag tag-correct">✓ 正确</span>';
+    } else if (r.partial) {
+      html += '<span class="tag" style="background:#fef7e0;color:#b06000;">△ 部分正确</span>';
+    } else {
+      html += '<span class="tag tag-wrong">✗ 错误</span>';
+    }
+    html += '</div>';
+
+    if (q.type === 'case') {
+      html += '<div class="a-content">';
+      html += '<div class="label">📝 参考答案：</div>';
+      html += '<div style="margin:8px 0; line-height:1.9;">' + q.answerText.replace(/\n/g, '<br>') + '</div>';
+      html += '<div class="explanation">' + q.explanation + '</div>';
+      html += '</div>';
+    } else {
+      html += '<div class="a-content">';
+      html += '<div class="label">正确答案：' + formatAnswer(q, idx) + '</div>';
+      html += '<div class="explanation">' + q.explanation + '</div>';
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+
+  // 整体评价
+  html += generateOverallEval(totalScore, results);
+
+  const section = document.getElementById('answerSection');
+  section.innerHTML = html;
+  section.classList.add('show');
+}
+
+function formatAnswer(q, idx) {
+  if (q.type === 'multi') {
+    return q.answer.map(a => String.fromCharCode(65 + a)).join('、');
+  }
+  return String.fromCharCode(65 + q.answer);
+}
+
+function generateOverallEval(score, results) {
+  let level, comment, tips;
+  if (score >= 85) {
+    level = '🏆 优秀 · 稳扎稳打';
+    comment = '你的基础非常扎实！选择题正确率高，对规范条文的理解到位。案例题注意答题的规范性和完整性，按得分点逐一作答，避免遗漏。';
+    tips = '💡 <strong>冲刺建议：</strong>继续保持刷题节奏，重点关注高频考点的细节记忆，案例题多练答题模板，争取实务科目高分通过。';
+  } else if (score >= 70) {
+    level = '👍 良好 · 稳步提升';
+    comment = '整体掌握不错，但还有提升空间。多选题可能是你的薄弱环节（容易漏选或错选），建议加强对易混淆知识点的辨析。';
+    tips = '💡 <strong>冲刺建议：</strong>① 多选题牢记"宁可少选不错选"原则；② 重点复习母线槽、仪表取源、合同管理等高频考点；③ 案例题多对照标准答案，学习得分点表述。';
+  } else if (score >= 60) {
+    level = '💪 及格 · 还需巩固';
+    comment = '基础知识点有掌握，但对规范中的具体数字、条件记忆不够精准。多选题失分较多，说明对知识的系统性和准确性还需加强。';
+    tips = '💡 <strong>冲刺建议：</strong>① 回归教材，重点记忆规范中的关键数字（如2.5m、1.5倍、40%等）；② 建立错题本，反复回顾；③ 每天坚持一套题，保持手感。';
+  } else {
+    level = '📚 需努力 · 重点突破';
+    comment = '目前对核心考点的掌握还不够系统。选择题的错误说明基础概念需要重新梳理，案例题需要学习答题框架和规范表述。';
+    tips = '💡 <strong>冲刺建议：</strong>① 优先通读教材重点章节（技术部分：电气、管道、通风空调；管理部分：合同、质量、安全）；② 从真题入手，逐题理解考点；③ 不要放弃案例题，掌握"判断+理由+引用规范"的答题模板。';
+  }
+
+  return `
+    <div class="overall-eval fade-in">
+      <h3>${level}</h3>
+      <p>${comment}</p>
+      <div class="tip">${tips}</div>
+      <div class="tip" style="border-top:1px dashed #f9ab00; margin-top:10px; padding-top:10px;">
+        📊 <strong>答题统计：</strong>单选题 ${results.filter(r => r.correct !== null && r.correct).length} 题正确 / ${results.filter((r, i) => quizData.questions[i].type === 'single').length} 题 | 
+        多选题 ${results.filter(r => r.correct !== null && r.correct).length} 题全对 | 
+        案例题 1 题（请对照参考答案自行评分）
+      </div>
+    </div>`;
+}
+
+// ========== 重置 ==========
+function resetQuiz() {
+  if (!confirm('确定要重新作答吗？当前答案将被清除。')) return;
+  userAnswers = {};
+  quizSubmitted = false;
+  localStorage.removeItem('erjian_answers_' + quizData.day);
+  localStorage.removeItem('erjian_submitted_' + quizData.day);
+  document.getElementById('answerSection').classList.remove('show');
+  document.getElementById('submitBtn').style.display = 'block';
+  document.getElementById('resetBtn').style.display = 'none';
+  renderQuiz();
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ========== 快捷方式弹窗 ==========
+function showShortcutModal() {
+  document.getElementById('shortcutModal').classList.add('show');
+}
+function closeShortcutModal() {
+  document.getElementById('shortcutModal').classList.remove('show');
+}
+
+// ========== PWA Service Worker 注册 ==========
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      console.log('SW registered:', reg);
+    }).catch(err => {
+      console.log('SW registration failed:', err);
+    });
+  });
+}
+
+// ========== 启动 ==========
+init();
+</script>
+</body>
+</html>

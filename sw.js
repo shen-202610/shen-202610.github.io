@@ -1,5 +1,6 @@
+const CACHE_VERSION = "v3.0-20261027";
 // Service Worker - PWA 离线缓存
-const CACHE_NAME = 'erjian-quiz-v2.0';
+const CACHE_NAME = 'erjian-quiz-v3.0';
 const urlsToCache = [
   './',
   './index.html',

@@ -794,7 +794,6 @@ function showResult(score,right,total,q){
 
 /* ================= 错题本 ================= */
 function renderWrong(){
-  rebuildWrongs(); save();
   const box=document.getElementById('v-wrong');
   const list=Object.keys(store.wrongs).map(k=>JSON.parse(store.wrongs[k]));
   if(!list.length){

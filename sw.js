@@ -1,9 +1,12 @@
 // Service Worker - PWA 离线缓存
-const CACHE_NAME = 'erjian-quiz-v1';
+const CACHE_NAME = 'erjian-quiz-v2';
 const urlsToCache = [
   './',
   './index.html',
-  './manifest.json'
+  './quiz-data.js',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', event => {

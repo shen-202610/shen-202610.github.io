@@ -9,29 +9,29 @@
 <style>
 :root{--blue:#1a5fb4;--blue2:#4a90d9;--bg:#f4f6fa;--card:#fff;--ok:#2e8b57;--warn:#c0392b;--line:#e5e9f0;--txt:#1c2430;--sub:#66727f}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);font-size:16px;line-height:1.65}
-.wrap{max-width:720px;margin:0 auto;padding:0 0 90px}
-header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;padding:14px 16px 12px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);font-size:15px;line-height:1.55}
+.wrap{max-width:720px;margin:0 auto;padding:0 0 72px}
+header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;padding:9px 14px 8px;box-shadow:0 1px 8px rgba(0,0,0,.12)}
 .h-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.h-top h1{font-size:18px;margin:0;font-weight:700}
-.badge{font-size:12px;background:rgba(255,255,255,.22);padding:3px 9px;border-radius:20px;white-space:nowrap}
-.progress-outer{margin-top:10px;height:6px;background:rgba(255,255,255,.3);border-radius:4px;overflow:hidden}
+.h-top h1{font-size:15.5px;margin:0;font-weight:700}
+.badge{font-size:11px;background:rgba(255,255,255,.22);padding:2px 8px;border-radius:20px;white-space:nowrap}
+.progress-outer{margin-top:5px;height:4px;background:rgba(255,255,255,.3);border-radius:4px;overflow:hidden}
 .progress-inner{height:100%;width:0;background:#ffd666;transition:width .3s}
-.p-label{font-size:12px;margin-top:5px;opacity:.92}
-.tabs{display:flex;gap:8px;padding:12px 14px;background:var(--card);position:sticky;top:66px;z-index:15;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.tab{flex:1;min-width:88px;text-align:center;font-size:14px;padding:8px 4px;border-radius:10px;background:var(--bg);color:var(--sub);cursor:pointer;transition:.2s;border:1px solid transparent;user-select:none}
+.p-label{font-size:10px;margin-top:3px;opacity:.92}
+.tabs{display:flex;gap:6px;padding:8px 10px;background:var(--card);position:sticky;top:64px;z-index:15;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tab{flex:1;min-width:72px;text-align:center;font-size:13px;padding:6px 2px;border-radius:8px;background:var(--bg);color:var(--sub);cursor:pointer;transition:.2s;border:1px solid transparent;user-select:none}
 .tab.active{background:var(--blue);color:#fff;font-weight:600}
 .tab.err{background:#fdecea;color:var(--warn);border-color:#f5c6cb}
-.card{background:var(--card);margin:14px;border-radius:16px;padding:18px 16px;box-shadow:0 2px 12px rgba(20,40,80,.06)}
-.qmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.tag{font-size:12px;padding:2px 9px;border-radius:20px;background:#eaf2fd;color:var(--blue);font-weight:600}
+.card{background:var(--card);margin:10px 12px;border-radius:14px;padding:14px 13px;box-shadow:0 1px 8px rgba(20,40,80,.06)}
+.qmeta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:11px;padding:1px 7px;border-radius:20px;background:#eaf2fd;color:var(--blue);font-weight:600}
 .tag.multi{background:#fef3e2;color:#d97706}
 .tag.kp{background:#f0f4f8;color:var(--sub);font-weight:400}
 .tag.diff{background:#eefaf3;color:var(--ok)}
 .tag.done{background:#e9ecef;color:#495057}
-.qtext{font-size:17px;font-weight:600;line-height:1.7;margin:6px 0 16px}
-.opt{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:.15s;display:flex;gap:10px;align-items:flex-start;user-select:none}
-.opt .no{flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg);color:var(--sub);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px}
+.qtext{font-size:15.5px;font-weight:600;line-height:1.6;margin:4px 0 12px}
+.opt{border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;margin-bottom:8px;cursor:pointer;transition:.15s;display:flex;gap:8px;align-items:flex-start;user-select:none}
+.opt .no{flex:none;width:20px;height:20px;border-radius:50%;background:var(--bg);color:var(--sub);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px}
 .opt.sel{border-color:var(--blue);background:#f0f6ff}
 .opt.sel .no{background:var(--blue);color:#fff}
 .opt.ok{border-color:var(--ok);background:#eefaf3}
@@ -39,66 +39,66 @@ header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--
 .opt.bad{border-color:var(--warn);background:#fdecea}
 .opt.bad .no{background:var(--warn);color:#fff}
 .opt.disabled{pointer-events:none;opacity:.9}
-.opt-txt{font-size:15.5px;line-height:1.55}
-.exp{margin-top:14px;padding:14px;border-radius:12px;background:#f7f9fc;border-left:4px solid var(--blue);font-size:14.5px;line-height:1.75;display:none}
+.opt-txt{font-size:14px;line-height:1.5}
+.exp{margin-top:10px;padding:11px;border-radius:10px;background:#f7f9fc;border-left:4px solid var(--blue);font-size:13.5px;line-height:1.65;display:none}
 .exp.show{display:block}
 .exp strong{color:var(--blue)}
-.btn{display:inline-block;border:none;border-radius:12px;padding:13px 22px;font-size:16px;font-weight:600;cursor:pointer;transition:.2s}
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
 .btn-primary{background:var(--blue);color:#fff;width:100%}
 .btn-primary:active{transform:scale(.98)}
 .btn-primary:disabled{background:#b8c6d8;cursor:not-allowed}
 .btn-ghost{background:var(--bg);color:var(--blue);border:1px solid var(--blue)}
-.pager{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 14px 0}
+.pager{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 12px 0}
 .pager .btn{flex:1}
 .pager .btn:disabled{opacity:.4}
-.cnt{text-align:center;font-size:13px;color:var(--sub);margin:14px 0 4px}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 16px;justify-content:center}
-.chip{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;background:var(--bg);color:var(--sub);cursor:pointer;border:1.5px solid transparent}
+.cnt{text-align:center;font-size:12px;color:var(--sub);margin:10px 0 2px}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin:0 12px;justify-content:center}
+.chip{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;background:var(--bg);color:var(--sub);cursor:pointer;border:1.5px solid transparent}
 .chip.cur{border-color:var(--blue);background:#eaf2fd}
 .chip.right{background:#eefaf3;color:var(--ok)}
 .chip.wrong{background:#fdecea;color:var(--warn)}
 .chip.done{background:#eaf2fd;color:var(--blue)}
 /* 首页 / 章节选择 */
-.chapter{background:var(--card);margin:12px 14px;border-radius:14px;padding:14px;box-shadow:0 1px 6px rgba(20,40,80,.05);cursor:pointer;transition:.15s;border:1.5px solid transparent}
+.chapter{background:var(--card);margin:8px 12px;border-radius:12px;padding:11px;box-shadow:0 1px 6px rgba(20,40,80,.05);cursor:pointer;transition:.15s;border:1.5px solid transparent}
 .chapter:active{transform:scale(.99)}
 .chapter.locked{opacity:.55;cursor:not-allowed}
 .chapter-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.chapter-title{font-weight:700;font-size:16px}
-.chapter-title small{display:block;font-weight:400;font-size:12px;color:var(--sub);margin-top:3px}
-.ch-state{font-size:12px;white-space:nowrap;padding:3px 9px;border-radius:20px}
+.chapter-title{font-weight:700;font-size:14.5px}
+.chapter-title small{display:block;font-weight:400;font-size:11px;color:var(--sub);margin-top:2px}
+.ch-state{font-size:11px;white-space:nowrap;padding:2px 7px;border-radius:20px}
 .st-new{background:#eaf2fd;color:var(--blue)}
 .st-doing{background:#fef3e2;color:#d97706}
 .st-pass{background:#eefaf3;color:var(--ok)}
 .st-lock{background:#eceff3;color:#95a0ac}
-.mini-bar{margin-top:10px;height:5px;background:var(--bg);border-radius:4px;overflow:hidden}
+.mini-bar{margin-top:7px;height:4px;background:var(--bg);border-radius:4px;overflow:hidden}
 .mini-bar>i{display:block;height:100%;background:var(--ok);border-radius:4px}
 /* 成绩弹层 */
-.overlay{position:fixed;inset:0;background:rgba(10,20,40,.5);z-index:50;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay{position:fixed;inset:0;background:rgba(10,20,40,.5);z-index:50;display:none;align-items:center;justify-content:center;padding:14px}
 .overlay.show{display:flex}
-.result{background:#fff;border-radius:20px;width:100%;max-width:420px;padding:24px 20px;animation:pop .25s}
+.result{background:#fff;border-radius:16px;width:100%;max-width:400px;padding:18px 16px;animation:pop .25s}
 @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
-.result h2{margin:0 0 6px;text-align:center;font-size:22px}
-.bigscore{text-align:center;font-size:46px;font-weight:800;color:var(--blue);line-height:1.1;margin:8px 0}
+.result h2{margin:0 0 4px;text-align:center;font-size:19px}
+.bigscore{text-align:center;font-size:40px;font-weight:800;color:var(--blue);line-height:1.1;margin:6px 0}
 .bigscore.pass{color:var(--ok)}
 .bigscore.fail{color:var(--warn)}
-.res-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:15px}
+.res-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
 .res-row b{color:var(--blue)}
-.eval{background:#f7f9fc;border-radius:12px;padding:12px 14px;margin:14px 0;font-size:14px;line-height:1.7}
+.eval{background:#f7f9fc;border-radius:10px;padding:10px 12px;margin:10px 0;font-size:13.5px;line-height:1.6}
 .eval strong{color:var(--blue)}
-.res-btns{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.res-btns{display:flex;flex-direction:column;gap:8px;margin-top:12px}
 /* 错题本 */
-.empty{text-align:center;color:var(--sub);padding:40px 16px;font-size:15px}
-.empty .ico{font-size:42px;margin-bottom:10px}
-.wb-item{background:var(--card);margin:12px 14px;border-radius:14px;padding:14px;border-left:5px solid var(--warn);box-shadow:0 1px 6px rgba(20,40,80,.05)}
-.wb-item .from{font-size:12px;color:var(--sub);margin-bottom:6px}
-.wb-item .qt{font-weight:600;font-size:15.5px;margin-bottom:8px}
-.wb-item .ans{font-size:14px;color:var(--ok);margin-bottom:4px}
-.wb-item .ex{font-size:13.5px;color:var(--sub);line-height:1.65}
-.wb-item .doit{margin-top:10px;font-size:14px;padding:8px 16px}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(20,30,45,.92);color:#fff;padding:10px 20px;border-radius:24px;font-size:14px;z-index:99;opacity:0;transition:.3s;pointer-events:none;max-width:90%}
+.empty{text-align:center;color:var(--sub);padding:30px 12px;font-size:14px}
+.empty .ico{font-size:36px;margin-bottom:8px}
+.wb-item{background:var(--card);margin:8px 12px;border-radius:12px;padding:11px;border-left:5px solid var(--warn);box-shadow:0 1px 6px rgba(20,40,80,.05)}
+.wb-item .from{font-size:11px;color:var(--sub);margin-bottom:4px}
+.wb-item .qt{font-weight:600;font-size:14.5px;margin-bottom:6px}
+.wb-item .ans{font-size:13.5px;color:var(--ok);margin-bottom:2px}
+.wb-item .ex{font-size:13px;color:var(--sub);line-height:1.6}
+.wb-item .doit{margin-top:8px;font-size:13px;padding:6px 14px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(20,30,45,.92);color:#fff;padding:8px 16px;border-radius:20px;font-size:13px;z-index:99;opacity:0;transition:.3s;pointer-events:none;max-width:90%}
 .toast.show{opacity:1}
-footer{text-align:center;color:var(--sub);font-size:12px;padding:20px 16px 40px;line-height:1.7}
-.guide-note{background:#fff8e6;border:1px solid #ffe08a;color:#8a6d1a;font-size:13px;margin:12px 14px;padding:11px 14px;border-radius:12px;line-height:1.6}
+footer{text-align:center;color:var(--sub);font-size:11px;padding:14px 16px 28px;line-height:1.6}
+.guide-note{background:#fff8e6;border:1px solid #ffe08a;color:#8a6d1a;font-size:12.5px;margin:8px 12px;padding:9px 12px;border-radius:10px;line-height:1.55}
 </style>
 </head>
 <body>
@@ -233,7 +233,7 @@ function renderHome(){
   const box=document.getElementById('v-home');
   let html='';
   Object.keys(chapterMeta).forEach(ch=>{
-    html+='<div style="margin:18px 16px 4px;font-size:14px;color:var(--sub);font-weight:600">'+esc(ch)+'</div>';
+    html+='<div style="margin:12px 12px 2px;font-size:12.5px;color:var(--sub);font-weight:600">'+esc(ch)+'</div>';
     chapterMeta[ch].forEach(key=>{
       const d=sectionQuizData[key];
       if(!d){return;}
@@ -438,10 +438,10 @@ function showResult(score,right,total,q){
     const my=p.answers[x.id]||[];
     const ca=Array.isArray(x.answer)?x.answer:[x.answer];
     const ok=my.length&&sameAnswer(x,my);
-    rvHtml+='<div style="border-bottom:1px solid #eee;padding:10px 0;text-align:left">'+
-      '<div style="font-weight:600;font-size:15px">'+(i+1)+'. '+esc(x.question)+' <span class="tag">'+x.typeLabel+'</span></div>'+
-      '<div style="font-size:13px;margin:5px 0">你的答案：<b style="color:'+(ok?'var(--ok)':'var(--warn)')+'">'+(my.length?my.map(a=>String.fromCharCode(65+a)).join('、'):'未答')+'</b> ｜ 正确答案：<b style="color:var(--ok)">'+ca.map(a=>String.fromCharCode(65+a)).join('、')+'</b> '+(ok?'✅':'❌')+'</div>'+
-      '<div style="font-size:13px;line-height:1.65;background:#f7f9fc;padding:9px;border-radius:8px">'+x.explanation+'</div></div>';
+    rvHtml+='<div style="border-bottom:1px solid #eee;padding:8px 0;text-align:left">'+
+      '<div style="font-weight:600;font-size:14px">'+(i+1)+'. '+esc(x.question)+' <span class="tag">'+x.typeLabel+'</span></div>'+
+      '<div style="font-size:12.5px;margin:4px 0">你的答案：<b style="color:'+(ok?'var(--ok)':'var(--warn)')+'">'+(my.length?my.map(a=>String.fromCharCode(65+a)).join('、'):'未答')+'</b> ｜ 正确答案：<b style="color:var(--ok)">'+ca.map(a=>String.fromCharCode(65+a)).join('、')+'</b> '+(ok?'✅':'❌')+'</div>'+
+      '<div style="font-size:12.5px;line-height:1.6;background:#f7f9fc;padding:8px;border-radius:8px">'+x.explanation+'</div></div>';
   });
   const rbox=document.getElementById('resultBox');
   rbox.innerHTML='<h2>'+(pass?'🎉 本节通过':'📖 还需巩固')+'</h2>'+
@@ -451,8 +451,8 @@ function showResult(score,right,total,q){
     '<div class="res-row"><span>答错</span><b style="color:var(--warn)">'+wrongN+'</b></div>'+
     '<div class="res-row"><span>及格线</span><b>'+sectionQuizData[curSec].passingScore+'分</b></div>'+
     '<div class="eval"><strong>整体评价：</strong>'+evalTxt+'</div>'+
-    '<div style="font-size:14px;font-weight:700;color:var(--blue);margin:12px 0 4px">📖 逐题解析（答错已自动收录到错题本）</div>'+
-    '<div style="max-height:46vh;overflow:auto;margin:6px 0 14px">'+rvHtml+'</div>'+
+    '<div style="font-size:13px;font-weight:700;color:var(--blue);margin:10px 0 3px">📖 逐题解析（答错已自动收录到错题本）</div>'+
+    '<div style="max-height:44vh;overflow:auto;margin:4px 0 12px">'+rvHtml+'</div>'+
     '<div class="res-btns">'+
     '<button class="btn btn-primary" id="rRetry">🔄 重做本节</button>'+
     (pass&&sectionOrder.indexOf(curSec)+1<sectionOrder.length?'<button class="btn btn-primary" id="rNext">进入下一节：'+sectionOrder[sectionOrder.indexOf(curSec)+1]+'</button>':'')+
@@ -489,10 +489,10 @@ function renderWb(){
         '<span class="tag kp">'+esc(x.knowledgePoint||'')+'</span>'+
         '<span class="tag diff">'+esc(x.difficulty||'')+'</span>'+
       '</div>'+
-      '<div style="font-size:16px;font-weight:600;line-height:1.7;margin:4px 0 12px">'+esc(x.question)+'</div>'+
+      '<div style="font-size:15px;font-weight:600;line-height:1.6;margin:3px 0 10px">'+esc(x.question)+'</div>'+
       opts+
-      '<div style="margin-top:12px;padding:11px 13px;border-radius:12px;background:#eefaf3;font-size:14px;color:var(--ok);font-weight:600">✅ 正确答案：'+ansTxt+'</div>'+
-      '<div style="margin-top:10px;padding:13px;border-radius:12px;background:#f7f9fc;border-left:4px solid var(--blue);font-size:14px;line-height:1.75">'+x.explanation+'</div>'+
+      '<div style="margin-top:10px;padding:9px 11px;border-radius:10px;background:#eefaf3;font-size:13.5px;color:var(--ok);font-weight:600">✅ 正确答案：'+ansTxt+'</div>'+
+      '<div style="margin-top:8px;padding:11px;border-radius:10px;background:#f7f9fc;border-left:4px solid var(--blue);font-size:13.5px;line-height:1.65">'+x.explanation+'</div>'+
     '</div>'+
     '<div style="display:flex;gap:8px;margin-top:12px">'+
       '<button class="btn btn-ghost" id="wbPrev" style="flex:1">← 上一题</button>'+

@@ -29,6 +29,7 @@ header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--
 .tag.kp{background:#f0f4f8;color:var(--sub);font-weight:400}
 .tag.diff{background:#eefaf3;color:var(--ok)}
 .tag.done{background:#e9ecef;color:#495057}
+.tag.err{background:#fdecea;color:var(--warn)}
 .qtext{font-size:15.5px;font-weight:600;line-height:1.6;margin:4px 0 12px}
 .opt{border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;margin-bottom:8px;cursor:pointer;transition:.15s;display:flex;gap:8px;align-items:flex-start;user-select:none}
 .opt .no{flex:none;width:20px;height:20px;border-radius:50%;background:var(--bg);color:var(--sub);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px}
@@ -99,6 +100,23 @@ header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--
 .toast.show{opacity:1}
 footer{text-align:center;color:var(--sub);font-size:11px;padding:14px 16px 28px;line-height:1.6}
 .guide-note{background:#fff8e6;border:1px solid #ffe08a;color:#8a6d1a;font-size:12.5px;margin:8px 12px;padding:9px 12px;border-radius:10px;line-height:1.55}
+/* 子页面顶栏（练题/错题单题复习） */
+.subnav{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;display:flex;align-items:center;gap:8px;padding:10px 10px;box-shadow:0 1px 8px rgba(0,0,0,.12)}
+.subnav .bk{background:rgba(255,255,255,.18);border:none;color:#fff;border-radius:8px;padding:5px 10px;font-size:14px;cursor:pointer;flex:none}
+.subnav .bk:active{background:rgba(255,255,255,.32)}
+.subnav .t{font-weight:700;font-size:15px;flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:44px}
+/* 练题模式 */
+.judge{margin-top:10px;padding:9px 11px;border-radius:10px;font-size:13.5px;font-weight:700;line-height:1.5}
+.judge.ok{background:#eefaf3;color:var(--ok)}
+.judge.bad{background:#fdecea;color:var(--warn)}
+.judge .sub{font-weight:400;font-size:12.5px;margin-top:3px;line-height:1.5}
+.streak{margin-top:8px;padding:8px 11px;border-radius:10px;background:#fff8e6;border:1px solid #ffe08a;color:#8a6d1a;font-size:12.5px;line-height:1.5}
+.streak.good{background:#eefaf3;border-color:#b8e0c5;color:var(--ok)}
+.popt{background:var(--card);margin:8px 12px;border-radius:12px;padding:12px;box-shadow:0 1px 6px rgba(20,40,80,.05);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1.5px solid transparent}
+.popt:active{transform:scale(.99)}
+.popt b{font-size:14.5px}
+.popt span{font-size:12px;color:var(--sub)}
+.popt .go{flex:none;font-size:12px;color:var(--blue);background:#eaf2fd;padding:2px 8px;border-radius:20px}
 </style>
 </head>
 <body>
@@ -113,7 +131,7 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:14px 16px 28px;
 
 <div class="tabs">
   <div class="tab active" data-view="home">📚 章节</div>
-  <div class="tab" data-view="quiz">✍️ 练习</div>
+  <div class="tab" data-view="practice-home">✍️ 练题</div>
   <div class="tab err" data-view="wrong">📌 错题本</div>
 </div>
 
@@ -140,8 +158,16 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:14px 16px 28px;
     <div class="guide-note" id="guideNote"></div>
   </div>
 
+  <!-- 练题模式：范围选择 -->
+  <div id="v-practice-home" style="display:none"></div>
+  <!-- 练题模式：做题 -->
+  <div id="v-practice" style="display:none"></div>
+
   <!-- 错题本 -->
   <div id="v-wrong"></div>
+
+  <!-- 错题单题复习：独立页 -->
+  <div id="v-wrong-detail" style="display:none"></div>
 
 </div>
 
@@ -204,10 +230,9 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 
 /* ================= 状态 ================= */
 let view='home';
-let curSec=null,curIdx=0,mode='section'; // mode: section | wrong
+let curSec=null,curIdx=0; // 章节模式
 let answers={};     // {qid: [idx,...]}
 let answered={};    // {qid: true} 只标记已作答，不暴露对错
-let wrongList=[];   // 当前错题重练队列
 let multiTimer=null; // 多选自动翻页计时器
 
 const allSections=sectionOrder.map(k=>({key:k,data:sectionQuizData[k]}));
@@ -262,28 +287,22 @@ function renderHome(){
 /* ================= 开始一节 ================= */
 function startSection(key){
   if(!sectionQuizData[key]){toast('该小节数据暂未开放');renderHome();showView('home');return;}
-  curSec=key;mode='section';curIdx=0;answers={};answered={};
+  curSec=key;curIdx=0;answers={};answered={};
   const p=store.progress[key];
   if(p&&p.answers){
     Object.keys(p.answers).forEach(qid=>{answers[qid]=p.answers[qid];answered[qid]=true;});
   }
   showView('quiz');
 }
-function startWrong(list){
-  wrongList=list.map(x=>({id:x.id,type:x.type,question:x.question,options:x.options,answer:x.answer,explanation:x.explanation,knowledgePoint:x.knowledgePoint,typeLabel:x.typeLabel}));
-  if(!wrongList.length){toast('没有错题可练');return;}
-  mode='wrong';curSec=null;curIdx=0;answers={};answered={};
-  showView('quiz');
-}
 
 /* ================= 渲染题目 ================= */
-function curList(){const d=mode==='section'?sectionQuizData[curSec]:null;return (mode==='section'&&d)?d.questions:wrongList;}
+function curList(){return sectionQuizData[curSec]?sectionQuizData[curSec].questions:[];}
 function curQ(){const l=curList();return l[Math.min(curIdx,l.length-1)];}
 function renderQuiz(){
   const q=curQ();if(!q)return;
   const list=curList();
   // 顶部元信息
-  const d=mode==='section'?sectionQuizData[curSec]:{sectionName:'错题重练'};
+  const d=sectionQuizData[curSec];
   document.getElementById('qmeta').innerHTML=
     '<span class="tag'+(q.type==='multiple'?' multi':'')+'">'+q.typeLabel+'</span>'+
     '<span class="tag kp">'+esc(q.knowledgePoint||'')+'</span>'+
@@ -308,13 +327,13 @@ function renderQuiz(){
   const cBtn=document.getElementById('confirmBtn');
   cBtn.style.display='none';
   // 进度
-  document.getElementById('cnt').textContent=(mode==='section'?'本节 ':'错题 ')+'第 '+(curIdx+1)+' / '+list.length+' 题';
-  document.getElementById('pLabel').textContent=(mode==='section'?(curSec+' '+d.sectionName):'错题重练 · 来自已掌握章节的错题');
-  document.getElementById('badge').textContent=(mode==='section'?(curSec[0]==='2'?'第二章':'第一章'):'错题本');
+  document.getElementById('cnt').textContent='本节 第 '+(curIdx+1)+' / '+list.length+' 题';
+  document.getElementById('pLabel').textContent=curSec+' '+d.sectionName;
+  document.getElementById('badge').textContent=curSec[0]==='2'?'第二章':'第一章';
   document.getElementById('progIn').style.width=((curIdx+1)/list.length*100)+'%';
   // 翻页按钮
   document.getElementById('prevBtn').disabled=curIdx===0;
-  document.getElementById('nextBtn').textContent=(curIdx===list.length-1)?(mode==='section'?'完成本节 →':'完成重练 →'):'下一题 →';
+  document.getElementById('nextBtn').textContent=(curIdx===list.length-1)?'完成本节 →':'下一题 →';
   document.getElementById('nextBtn').disabled=false;
   // 题号 chips
   const chips=document.getElementById('chips');chips.innerHTML='';
@@ -325,10 +344,8 @@ function renderQuiz(){
   chips.querySelectorAll('.chip').forEach(el=>el.onclick=()=>{curIdx=el.dataset.i|0;renderQuiz();});
   // 提示
   const g=document.getElementById('guideNote');
-  if(mode==='section'){
-    const pass=sectionPassed(curSec);
-    g.innerHTML=pass?'<b>本节已通过</b>，可继续下一节。':'全部答完后统一查看答案与解析；单选点选即自动下一题，多选勾满 2 项自动下一题。<b>本节达到 '+sectionQuizData[curSec].passingScore+' 分及以上</b>，下一节才会解锁。';
-  }else{g.innerHTML='错题重练：全部答完后统一统计，答对的错题自动移出，答错的继续保留在错题本。';}
+  const pass=sectionPassed(curSec);
+  g.innerHTML=pass?'<b>本节已通过</b>，可继续下一节。':'全部答完后统一查看答案与解析；单选点选即自动下一题，多选勾满 2 项自动下一题。<b>本节达到 '+sectionQuizData[curSec].passingScore+' 分及以上</b>，下一节才会解锁。';
 }
 function toggleOpt(q,i){
   const id=q.id;
@@ -363,13 +380,10 @@ function advanceNow(){
   }
 }
 function saveAnswer(q,my){
-  if(mode==='section'){
-    const p=store.progress[curSec]||{answers:{}};
-    p.answers[q.id]=my;store.progress[curSec]=p;save();
-  }
+  const p=store.progress[curSec]||{answers:{}};
+  p.answers[q.id]=my;store.progress[curSec]=p;save();
 }
 function finishSection(){
-  if(mode==='wrong'){finishWrong();return;}
   const q=sectionQuizData[curSec].questions;
   const p=store.progress[curSec]||{answers:{}};
   // 汇总本次作答
@@ -385,45 +399,21 @@ function finishSection(){
 }
 function rebuildWrongs(){
   const all={};
+  const old=store.wrongs||{};
   sectionOrder.forEach(k=>{
     const d=sectionQuizData[k];if(!d)return;
     const p=store.progress[k];if(!p||!p.answers)return;
     d.questions.forEach(x=>{
       if(p.answers[x.id]===undefined) return;
       if(!sameAnswer(x,p.answers[x.id]||[])){
-        all[x.id]=JSON.stringify({id:x.id,type:x.type,typeLabel:x.typeLabel,question:x.question,options:x.options,answer:x.answer,explanation:x.explanation,knowledgePoint:x.knowledgePoint});
+        let streak=0;
+        try{streak=JSON.parse(old[x.id]||'{}').okStreak||0;}catch(e){}
+        all[x.id]=JSON.stringify({id:x.id,type:x.type,typeLabel:x.typeLabel,question:x.question,options:x.options,answer:x.answer,explanation:x.explanation,knowledgePoint:x.knowledgePoint,difficulty:x.difficulty,okStreak:streak});
       }
     });
   });
   // 保留已答对的待重练标记对应的错题清除
   store.wrongs=all;
-}
-function finishWrong(){
-  // 重练后：答对的错题真正移除，答错的保留
-  const stillWrong=[];
-  wrongList.forEach(x=>{
-    const my=answers[x.id];
-    if(sameAnswer(x,my||[])){
-      delete store.wrongs[x.id];
-    }else{
-      store.wrongs[x.id]=JSON.stringify(x);stillWrong.push(x);
-    }
-  });
-  save();
-  const total=wrongList.length,ok=total-stillWrong.length;
-  const rbox=document.getElementById('resultBox');
-  rbox.innerHTML='<h2>🔄 错题重练完成</h2>'+
-    '<div class="bigscore '+(ok===total?'pass':(ok/total>=0.6?'':'fail'))+'">'+(total?Math.round(ok/total*100):100)+'分</div>'+
-    '<div class="res-row"><span>重练题数</span><b>'+total+'</b></div>'+
-    '<div class="res-row"><span>本次做对</span><b style="color:var(--ok)">'+ok+'</b></div>'+
-    '<div class="res-row"><span>仍需巩固</span><b style="color:var(--warn)">'+stillWrong.length+'</b></div>'+
-    '<div class="eval"><strong>提示：</strong>'+(stillWrong.length?'这 '+stillWrong.length+' 题仍在错题本中，建议隔天再做一遍，直到全部做对。':'太棒了！本次错题已全部做对，已从错题本移除 🎉' )+'</div>'+
-    '<div class="res-btns">'+
-    (stillWrong.length?'<button class="btn btn-primary" id="wbAgain">再练一遍这些错题</button>':'')+
-    '<button class="btn btn-ghost" id="wbBack">返回错题本</button></div>';
-  document.getElementById('overlay').classList.add('show');
-  const again=document.getElementById('wbAgain');if(again)again.onclick=()=>{document.getElementById('overlay').classList.remove('show');startWrong(stillWrong);};
-  document.getElementById('wbBack').onclick=()=>{document.getElementById('overlay').classList.remove('show');renderWrong();showView('wrong');};
 }
 function showResult(score,right,total,q){
   const pass=score>=sectionQuizData[curSec].passingScore;
@@ -461,16 +451,16 @@ function showResult(score,right,total,q){
   document.getElementById('overlay').classList.add('show');
   const retry=document.getElementById('rRetry');if(retry)retry.onclick=()=>{document.getElementById('overlay').classList.remove('show');startSection(curSec);};
   const nx=document.getElementById('rNext');if(nx)nx.onclick=()=>{document.getElementById('overlay').classList.remove('show');startSection(sectionOrder[sectionOrder.indexOf(curSec)+1]);};
-  const rw=document.getElementById('rWrong');if(rw)rw.onclick=()=>{document.getElementById('overlay').classList.remove('show');const list=q.filter(x=>!sameAnswer(x,(store.progress[curSec].answers||{})[x.id]||[]));startWrong(list);};
+  const rw=document.getElementById('rWrong');if(rw)rw.onclick=()=>{document.getElementById('overlay').classList.remove('show');const list=q.filter(x=>!sameAnswer(x,(store.progress[curSec].answers||{})[x.id]||[]));startPractice(list,curSec+' 错题');};
   document.getElementById('rHome').onclick=()=>{document.getElementById('overlay').classList.remove('show');renderHome();showView('home');};
 }
 
 /* ================= 错题本 ================= */
-let wbList=[],wbIdx=0; // 错题单题页状态
-function openWb(list,idx){
-  wbList=list.slice();wbIdx=idx;renderWb();document.getElementById('overlay').classList.add('show');
+let wbList=[],wbIdx=0,sx0=null; // 错题单题复习页状态
+function openWbView(list,idx){
+  wbList=list.slice();wbIdx=idx;renderWbView();showView('wrong-detail');
 }
-function renderWb(){
+function renderWbView(){
   const x=wbList[wbIdx];
   const ca=Array.isArray(x.answer)?x.answer:[x.answer];
   const ansTxt=ca.map(a=>String.fromCharCode(65+a)).join('、');
@@ -478,86 +468,248 @@ function renderWb(){
     const ok=ca.includes(i);
     return '<div class="opt'+(ok?' ok':'')+'"><div class="no">'+String.fromCharCode(65+i)+'</div><div class="opt-txt">'+esc(o)+'</div></div>';
   }).join('');
-  const rbox=document.getElementById('resultBox');
-  rbox.innerHTML='<div style="text-align:left">'+
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
-      '<span class="tag">📌 错题 '+(wbIdx+1)+' / '+wbList.length+'</span>'+
-      '<span class="tag'+(x.type==='multiple'?' multi':'')+'">'+esc(x.typeLabel)+'</span>'+
-    '</div>'+
-    '<div style="max-height:56vh;overflow:auto;padding-right:4px;-webkit-overflow-scrolling:touch">'+
-      '<div class="qmeta" style="margin:2px 0 4px">'+
+  const box=document.getElementById('v-wrong-detail');
+  box.innerHTML='<div class="subnav"><button class="bk" id="wbBack">← 返回</button><div class="t">错题本 · 单题复习 '+(wbIdx+1)+'/'+wbList.length+'</div></div>'+
+    '<div class="card">'+
+      '<div class="qmeta">'+
+        '<span class="tag'+(x.type==='multiple'?' multi':'')+'">'+esc(x.typeLabel)+'</span>'+
         '<span class="tag kp">'+esc(x.knowledgePoint||'')+'</span>'+
         '<span class="tag diff">'+esc(x.difficulty||'')+'</span>'+
+        ((x.okStreak||0)>0?'<span class="tag done">🔥 连续答对 '+(x.okStreak||0)+'/3</span>':'')+
       '</div>'+
-      '<div style="font-size:15px;font-weight:600;line-height:1.6;margin:3px 0 10px">'+esc(x.question)+'</div>'+
+      '<div class="qtext">'+esc(x.question)+'</div>'+
       opts+
       '<div style="margin-top:10px;padding:9px 11px;border-radius:10px;background:#eefaf3;font-size:13.5px;color:var(--ok);font-weight:600">✅ 正确答案：'+ansTxt+'</div>'+
       '<div style="margin-top:8px;padding:11px;border-radius:10px;background:#f7f9fc;border-left:4px solid var(--blue);font-size:13.5px;line-height:1.65">'+x.explanation+'</div>'+
     '</div>'+
-    '<div style="display:flex;gap:8px;margin-top:12px">'+
-      '<button class="btn btn-ghost" id="wbPrev" style="flex:1">← 上一题</button>'+
+    '<div class="pager">'+
+      '<button class="btn btn-ghost" id="wbPrev">← 上一题</button>'+
       '<button class="btn btn-ghost" id="wbDel" style="flex:1.4">✅ 我会了</button>'+
-      '<button class="btn btn-primary" id="wbNext" style="flex:1">下一题 →</button>'+
-    '</div>'+
-    '<div style="margin-top:10px"><button class="btn btn-ghost" id="wbClose" style="width:100%">返回错题本</button></div>'+
-  '</div>';
-  const pEl=document.getElementById('wbPrev');pEl.disabled=wbIdx===0;if(pEl.disabled)pEl.style.opacity=.4;else pEl.style.opacity=1;
-  const nEl=document.getElementById('wbNext');nEl.disabled=wbIdx===wbList.length-1;if(nEl.disabled)nEl.style.opacity=.4;else nEl.style.opacity=1;
-  pEl.onclick=()=>{wbIdx--;renderWb();};
-  nEl.onclick=()=>{wbIdx++;renderWb();};
-  document.getElementById('wbClose').onclick=()=>{document.getElementById('overlay').classList.remove('show');renderWrong();showView('wrong');};
+      '<button class="btn btn-primary" id="wbNext">下一题 →</button>'+
+    '</div>';
+  const pEl=document.getElementById('wbPrev');pEl.disabled=wbIdx===0;
+  const nEl=document.getElementById('wbNext');nEl.disabled=wbIdx===wbList.length-1;
+  pEl.onclick=()=>{wbIdx--;renderWbView();window.scrollTo(0,0);};
+  nEl.onclick=()=>{wbIdx++;renderWbView();window.scrollTo(0,0);};
+  document.getElementById('wbBack').onclick=()=>{renderWrong();showView('wrong');};
   document.getElementById('wbDel').onclick=()=>{
     const id=x.id;delete store.wrongs[id];save();toast('已移出错题本');
     wbList.splice(wbIdx,1);
-    if(!wbList.length){document.getElementById('overlay').classList.remove('show');renderWrong();showView('wrong');return;}
+    if(!wbList.length){renderWrong();showView('wrong');return;}
     if(wbIdx>=wbList.length)wbIdx=wbList.length-1;
-    renderWb();
+    renderWbView();
   };
   // 左右滑动切换题目
-  let sx=null;
-  rbox.ontouchstart=e=>{sx=e.touches[0].clientX;};
-  rbox.ontouchend=e=>{
-    if(sx===null)return;
-    const dx=e.changedTouches[0].clientX-sx;
-    if(dx<-45&&wbIdx<wbList.length-1){wbIdx++;renderWb();}
-    else if(dx>45&&wbIdx>0){wbIdx--;renderWb();}
-    sx=null;
+  box.ontouchstart=e=>{sx0=e.touches[0].clientX;};
+  box.ontouchend=e=>{
+    if(sx0===null)return;
+    const dx=e.changedTouches[0].clientX-sx0;
+    if(dx<-45&&wbIdx<wbList.length-1){wbIdx++;renderWbView();}
+    else if(dx>45&&wbIdx>0){wbIdx--;renderWbView();}
+    sx0=null;
   };
 }
 function renderWrong(){
   const box=document.getElementById('v-wrong');
   const list=Object.keys(store.wrongs).map(k=>JSON.parse(store.wrongs[k]));
   if(!list.length){
-    box.innerHTML='<div class="empty"><div class="ico">🎯</div>错题本是空的<br>答错的题目会自动收集到这里<br>掌握了再移除，直到全部清零</div>';
+    box.innerHTML='<div class="empty"><div class="ico">🎯</div>错题本是空的<br>章节答错或练题答错的题目会自动收集到这里<br>连续答对 3 次自动移除</div>';
     return;
   }
-  let html='<div class="guide-note">共 <b>'+list.length+'</b> 道待巩固错题。点任意一题可单题翻看解析（上下滚动、左右切题）；点「我会了」移出错题本。</div>';
+  let html='<div class="guide-note">共 <b>'+list.length+'</b> 道待巩固错题。点任意一题可单题复习（左右切题、上下滚动看解析）；进入「练题模式」每题即时判对错，<b>连续答对 3 次自动移出错题本</b>。</div>'+
+    '<div style="padding:0 12px"><button class="btn btn-primary" id="doAllWrong">▶ 练题模式（每题即时判对错）</button></div>';
   list.forEach((x,i)=>{
     const ca=Array.isArray(x.answer)?x.answer:[x.answer];
     const ansTxt=ca.map(a=>String.fromCharCode(65+a)).join('、');
-    html+='<div class="wb-item" data-idx="'+i+'"><div class="from">'+esc(x.typeLabel)+' · '+esc(x.knowledgePoint||'')+'</div>'+
+    html+='<div class="wb-item" data-idx="'+i+'"><div class="from">'+esc(x.typeLabel)+' · '+esc(x.knowledgePoint||'')+
+      ((x.okStreak||0)>0?' · <b style="color:#d97706">🔥 连续答对 '+(x.okStreak||0)+'/3</b>':'')+'</div>'+
       '<div class="qt">'+esc(x.question)+'</div>'+
       '<div class="ans">✅ 正确答案：'+ansTxt+'</div>'+
       '<button class="btn btn-ghost doit" data-id="'+x.id+'">我会了，移出错题本</button></div>';
   });
-  html+='<div style="padding:0 14px"><button class="btn btn-primary" id="doAllWrong">📝 一次性重练全部错题</button></div>';
   box.innerHTML=html;
   box.querySelectorAll('.doit').forEach(b=>b.onclick=e=>{e.stopPropagation();const id=b.dataset.id;delete store.wrongs[id];save();toast('已移出错题本');renderWrong();});
-  box.querySelectorAll('.wb-item').forEach(el=>el.onclick=()=>openWb(list,el.dataset.idx|0));
-  document.getElementById('doAllWrong').onclick=()=>startWrong(list);
+  box.querySelectorAll('.wb-item').forEach(el=>el.onclick=()=>openWbView(list,el.dataset.idx|0));
+  document.getElementById('doAllWrong').onclick=()=>startPractice(list,'错题本专练');
+}
+
+/* ================= 练题模式（每题即时判对错） ================= */
+let pList=[],pIdx=0,pResults={},pRange='',pSel={};
+function renderPracticeHome(){
+  const box=document.getElementById('v-practice-home');
+  const wbN=Object.keys(store.wrongs).length;
+  const totalN=sectionOrder.reduce((n,k)=>n+sectionQuizData[k].questions.length,0);
+  let html='<div class="guide-note">练题模式：<b>每题做完立即显示对错与解析</b>；答错自动加入错题本；错题本中的题<b>连续答对 3 次自动移除</b>。本模式不计入章节评分。</div>';
+  html+='<div class="popt" data-kind="all"><div><b>📖 全部题库</b><br><span>第一章 + 第二章 共 '+totalN+' 题</span></div><span class="go">开始 →</span></div>';
+  sectionOrder.forEach(k=>{
+    const d=sectionQuizData[k];if(!d)return;
+    html+='<div class="popt" data-kind="sec" data-sec="'+k+'"><div><b>'+k+' '+esc(d.sectionName)+'</b><br><span>'+d.questions.length+' 题</span></div><span class="go">开始 →</span></div>';
+  });
+  if(wbN>0)html+='<div class="popt" data-kind="wrong"><div><b>📌 错题本专练</b><br><span>'+wbN+' 题 · 连续答对 3 次自动移除</span></div><span class="go">开始 →</span></div>';
+  box.innerHTML=html;
+  box.querySelectorAll('.popt').forEach(el=>{
+    el.onclick=()=>{
+      const k=el.dataset.kind;
+      if(k==='all'){
+        const list=sectionOrder.reduce((a,s)=>a.concat(sectionQuizData[s].questions),[]);
+        startPractice(list,'全部题库');
+      }else if(k==='sec'){
+        startPractice(sectionQuizData[el.dataset.sec].questions.slice(),el.dataset.sec+' '+sectionQuizData[el.dataset.sec].sectionName);
+      }else{
+        const list=Object.keys(store.wrongs).map(x=>JSON.parse(store.wrongs[x]));
+        startPractice(list,'错题本专练');
+      }
+    };
+  });
+}
+function startPractice(list,name){
+  if(!list.length){toast('没有题目可练');return;}
+  pList=list.slice();pIdx=0;pResults={};pSel={};pRange=name;
+  showView('practice');renderPractice();
+}
+function practiceQ(){return pList[pIdx];}
+function renderPractice(){
+  const q=practiceQ();if(!q)return;
+  const done=pResults[q.id];
+  const ca=Array.isArray(q.answer)?q.answer:[q.answer];
+  const box=document.getElementById('v-practice');
+  let html='<div class="subnav"><button class="bk" id="pBack">← 返回</button><div class="t">练题模式 · '+esc(pRange)+'</div></div>';
+  html+='<div class="card">'+
+    '<div class="qmeta">'+
+      '<span class="tag'+(q.type==='multiple'?' multi':'')+'">'+esc(q.typeLabel)+'</span>'+
+      '<span class="tag kp">'+esc(q.knowledgePoint||'')+'</span>'+
+      '<span class="tag diff">'+esc(q.difficulty||'')+'</span>'+
+      (done?'<span class="tag '+(done.ok?'done':'err')+'">'+(done.ok?'✅ 已答对':'❌ 已答错')+'</span>':'')+
+    '</div>'+
+    '<div class="qtext">'+esc(q.question)+'</div>';
+  const my=done?done.my:(pSel[q.id]||[]);
+  html+='<div id="pOptBox">'+q.options.map((o,i)=>{
+    let cls='opt';
+    if(done){
+      if(ca.includes(i))cls+=' ok';else if(my.includes(i))cls+=' bad';
+      cls+=' disabled';
+    }else if(my.includes(i)){cls+=' sel';}
+    return '<div class="'+cls+'" data-i="'+i+'"><div class="no">'+String.fromCharCode(65+i)+'</div><div class="opt-txt">'+esc(o)+'</div></div>';
+  }).join('')+'</div>';
+  if(q.type==='multiple'&&!done){
+    html+='<button class="btn btn-primary" id="pJudge" style="width:100%" disabled>确认判分（多选）</button>';
+  }
+  if(done){
+    const myT=done.my.map(a=>String.fromCharCode(65+a)).join('、');
+    const caT=ca.map(a=>String.fromCharCode(65+a)).join('、');
+    html+='<div class="judge '+(done.ok?'ok':'bad')+'">'+(done.ok?'✅ 答对了！':'❌ 答错了'+(done.added?'，已加入错题本':'，已更新错题记录'))+
+      '<div class="sub">你的答案：'+(myT||'未选')+' ｜ 正确答案：'+caT+'</div></div>'+
+      '<div style="margin-top:8px;padding:11px;border-radius:10px;background:#f7f9fc;border-left:4px solid var(--blue);font-size:13.5px;line-height:1.65">'+q.explanation+'</div>';
+    if(done.streakTxt)html+='<div class="streak'+(done.streakGood?' good':'')+'">'+done.streakTxt+'</div>';
+  }
+  html+='</div>';
+  html+='<div class="pager">'+
+    '<button class="btn btn-ghost" id="pPrev">← 上一题</button>'+
+    '<button class="btn btn-primary" id="pNext">'+(pIdx===pList.length-1?'完成练题 →':'下一题 →')+'</button>'+
+  '</div>';
+  html+='<div class="cnt">第 '+(pIdx+1)+' / '+pList.length+' 题</div>';
+  box.innerHTML=html;
+  const prev=document.getElementById('pPrev');prev.disabled=pIdx===0;
+  prev.onclick=()=>{pIdx--;renderPractice();window.scrollTo(0,0);};
+  document.getElementById('pNext').onclick=()=>{if(pIdx<pList.length-1){pIdx++;renderPractice();window.scrollTo(0,0);}else{endPractice();}};
+  document.getElementById('pBack').onclick=()=>{showView('practice-home');renderPracticeHome();};
+  if(!done){
+    box.querySelectorAll('#pOptBox .opt').forEach(el=>el.onclick=()=>{
+      const i=el.dataset.i|0;
+      if(q.type==='single'){
+        judgePractice(q,[i]);
+      }else{
+        const sel=pSel[q.id]||[];
+        const j=sel.indexOf(i);
+        if(j>=0)sel.splice(j,1);else sel.push(i);
+        pSel[q.id]=sel;
+        renderPractice();
+        const jb=document.getElementById('pJudge');
+        if(jb)jb.disabled=sel.length<2;
+      }
+    });
+    const jb=document.getElementById('pJudge');
+    if(jb)jb.onclick=()=>judgePractice(q,(pSel[q.id]||[]).slice());
+  }
+}
+function judgePractice(q,my){
+  const ok=sameAnswer(q,my||[]);
+  const inWb=store.wrongs[q.id]!==undefined;
+  let added=false,streakTxt='',streakGood=false;
+  if(ok){
+    if(inWb){
+      let w=JSON.parse(store.wrongs[q.id]);
+      const st=(w.okStreak||0)+1;
+      if(st>=3){
+        delete store.wrongs[q.id];save();toast('🎉 连续答对 3 次，已自动移出错题本');
+        streakTxt='🎉 连续答对 3 次，本题已自动移出错题本！';streakGood=true;
+      }else{
+        w.okStreak=st;store.wrongs[q.id]=JSON.stringify(w);save();
+        streakTxt='🔥 连续答对 '+st+'/3，再答对 '+(3-st)+' 次将自动移出错题本';
+      }
+    }
+  }else{
+    if(inWb){
+      const w=JSON.parse(store.wrongs[q.id]);w.okStreak=0;
+      store.wrongs[q.id]=JSON.stringify(w);toast('答错，连续答对次数已重置');
+    }else{
+      store.wrongs[q.id]=JSON.stringify({id:q.id,type:q.type,typeLabel:q.typeLabel,question:q.question,options:q.options,answer:q.answer,explanation:q.explanation,knowledgePoint:q.knowledgePoint,difficulty:q.difficulty,okStreak:0});
+      added=true;toast('❌ 答错，已加入错题本');
+    }
+    save();
+  }
+  pResults[q.id]={ok:ok,my:(my||[]).slice(),added:added,streakTxt:streakTxt,streakGood:streakGood};
+  delete pSel[q.id];
+  renderPractice();
+}
+function endPractice(){
+  const keys=Object.keys(pResults);
+  const total=keys.length,ok=keys.filter(k=>pResults[k].ok).length;
+  const rest=pList.length-total;
+  const rbox=document.getElementById('resultBox');
+  rbox.innerHTML='<h2>🏁 练题完成</h2>'+
+    '<div class="bigscore '+(rest===0&&ok===total?'pass':(total&&ok/total>=0.6?'':'fail'))+'">'+(total?Math.round(ok/total*100):100)+'<span style="font-size:22px">分</span></div>'+
+    '<div class="res-row"><span>范围</span><b>'+esc(pRange)+'</b></div>'+
+    '<div class="res-row"><span>已答 / 总题</span><b>'+total+' / '+pList.length+'</b></div>'+
+    '<div class="res-row"><span>答对</span><b style="color:var(--ok)">'+ok+'</b></div>'+
+    '<div class="res-row"><span>答错</span><b style="color:var(--warn)">'+(total-ok)+'</b></div>'+
+    (rest>0?'<div class="res-row"><span>未做</span><b style="color:var(--sub)">'+rest+'</b></div>':'')+
+    '<div class="eval"><strong>提示：</strong>'+((total-ok)>0?'答错的题目已收录进错题本，可继续练题巩固，错题连续答对 3 次会自动移除。':'本次答题全部正确！错题本中的题连续答对 3 次会自动移除。')+'</div>'+
+    '<div class="res-btns">'+
+    (rest>0?'<button class="btn btn-primary" id="eContinue">继续做未答的 '+rest+' 题</button>':'')+
+    '<button class="btn btn-primary" id="eAgain">🔄 再练一遍</button>'+
+    '<button class="btn btn-ghost" id="eHome">返回练题首页</button>'+
+    (Object.keys(store.wrongs).length?'<button class="btn btn-ghost" id="eWb">去错题本（'+Object.keys(store.wrongs).length+' 题）</button>':'')+
+    '</div>';
+  document.getElementById('overlay').classList.add('show');
+  const ec=document.getElementById('eContinue');
+  if(ec)ec.onclick=()=>{document.getElementById('overlay').classList.remove('show');const i=pList.findIndex(q=>!pResults[q.id]);if(i>=0){pIdx=i;renderPractice();window.scrollTo(0,0);}};
+  document.getElementById('eAgain').onclick=()=>{document.getElementById('overlay').classList.remove('show');startPractice(pList.slice(),pRange);};
+  document.getElementById('eHome').onclick=()=>{document.getElementById('overlay').classList.remove('show');showView('practice-home');renderPracticeHome();};
+  const ew=document.getElementById('eWb');
+  if(ew)ew.onclick=()=>{document.getElementById('overlay').classList.remove('show');renderWrong();showView('wrong');};
 }
 
 /* ================= 视图切换 ================= */
 function showView(v){
+  const sub=v==='wrong-detail'||v==='practice';
+  if(v==='practice'&&!pList.length){toast('请先在练题页选择范围');showView('practice-home');return;}
+  if(v==='wrong-detail'&&!wbList.length){showView('wrong');return;}
+  if(v==='quiz'&&!curQ()){toast('请先在章节页选择一节');showView('home');return;}
   view=v;
+  document.querySelector('header').style.display=sub?'none':'';
+  document.querySelector('.tabs').style.display=sub?'none':'';
   document.getElementById('v-home').style.display=v==='home'?'':'none';
   document.getElementById('v-quiz').style.display=v==='quiz'?'':'none';
+  document.getElementById('v-practice-home').style.display=v==='practice-home'?'':'none';
+  document.getElementById('v-practice').style.display=v==='practice'?'':'none';
   document.getElementById('v-wrong').style.display=v==='wrong'?'':'none';
+  document.getElementById('v-wrong-detail').style.display=v==='wrong-detail'?'':'none';
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
   store.lastView=v;save();
   if(v==='home')renderHome();
   if(v==='wrong')renderWrong();
-  if(v==='quiz'&&!curQ()){toast('请先在章节页选择一节');showView('home');return;}
+  if(v==='practice-home')renderPracticeHome();
   if(v==='quiz')renderQuiz();
   window.scrollTo(0,0);
 }
@@ -574,8 +726,8 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>showView(t.dataset.vi
 
 /* ================= 初始化 ================= */
 renderHome();
-showView(store.lastView==='quiz'&&curSec?'quiz':(store.lastView||'home'));
-// 若上次在练习页但没有 curSec，回到 home
+showView(store.lastView||'home');
+// 子页面状态刷新后不可用则自动回退（showView 内部已处理）；练习页无 curSec 时回首页
 if(view==='quiz'&&!curQ())showView('home');
 
 /* ================= PWA 离线缓存 ================= */

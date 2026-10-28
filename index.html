@@ -153,391 +153,52 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:20px 16px 40px;
 
 <div class="toast" id="toast"></div>
 
-<script>
-// ============================================================
-// 二建机电刷题 · 题库数据（第一篇：机电工程技术）
-// 字符串一律用反引号 ` 定界，内部可自由包含双引号 "，不会破坏语法
-// 更新方法：① 加一小节 → 在 sectionQuizData 加一段，key 推入 sectionOrder
-//          ② 加一章   → 在 chapterMeta 登记
-// ============================================================
-const sectionQuizData = {
-  "1.1": {
-    sectionId: "1.1",
-    sectionName: "机电工程常用材料",
-    chapterName: "第一章 机电工程常用材料及设备",
-    version: "2026-10-27",
-    description: "金属材料（碳素结构钢、低合金结构钢、特殊性能低合金高强度钢、钢材分类、有色金属、金属复合材料）；非金属材料（风管、塑料水管、高分子材料、绝热材料）；电工线材（电线、电缆、母线槽、氧化镁电缆、绝缘材料）。",
-    passingScore: 80,
-    questions: [
-      { id: "1.1-001", type: "single", typeLabel: "单选题", knowledgePoint: "碳素结构钢", difficulty: "中",
-        question: "关于碳素结构钢的特性及用途，下列说法正确的是（　）。",
-        options: ["Q195、Q215、Q235A和Q235B可轧制成钢筋、钢板、钢管，Q235C、Q235D用于重要的焊接件", "碳素结构钢按屈服强度划分为Q195、Q215、Q235、Q275四个等级，数字表示抗拉强度下限值", "碳素结构钢含碳量越高，塑性越好，焊接性能越佳", "优质碳素钢不能制成钢丝、钢绞线、圆钢、高强度螺栓及预应力锚具"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>Q195、Q215、Q235A和Q235B塑性好、易于成型和焊接，可轧制成钢筋、钢板、钢管；Q235C、Q235D因含碳量和有害杂质控制更严、韧性更好，用于重要焊接件。<br><strong>B错误：</strong>Q后面的数字表示<strong>屈服强度下限值</strong>，不是抗拉强度。<br><strong>C错误：</strong>含碳量越高，强度和硬度越高，但<strong>塑性和焊接性能越差</strong>。<br><strong>D错误：</strong>优质碳素钢<strong>可以</strong>制成钢丝、钢绞线、圆钢、高强度螺栓及预应力锚具。<br><br><strong>【考点归纳】</strong>碳素结构钢：Q195~Q275，数字=屈服强度下限；含碳量↑→强度↑、塑性↓、焊接性↓；C/D级用于重要焊接件。<br><strong>【记忆口诀】</strong>Q字头看屈服，数字越大越强硬；C级D级能焊接，A级B级做钢筋。" },
-      { id: "1.1-002", type: "single", typeLabel: "单选题", knowledgePoint: "碳素结构钢质量等级", difficulty: "中",
-        question: "下列关于碳素结构钢质量等级的说法，正确的是（　）。",
-        options: ["Q235按质量等级分为A、B、C、D四级，其中A级硫、磷含量控制最严", "Q235中A、B、C、D的先后顺序，反映了钢材冲击韧性要求由低到高", "Q275因含碳量低，故焊接性能优于Q195", "质量等级为D级的钢材不得用于焊接结构"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong>Q235的质量等级A→B→C→D，硫、磷等有害杂质含量逐级降低，冲击韧性要求<strong>由低到高</strong>，低温冲击性能逐级提高。<br><strong>A错误：</strong>A级硫、磷含量控制<strong>最松</strong>，D级最严。<br><strong>C错误：</strong>Q275含碳量<strong>高于</strong>Q195，焊接性能<strong>更差</strong>。<br><strong>D错误：</strong>D级低温冲击韧性好，<strong>适合</strong>重要焊接结构和低温环境。<br><br><strong>【考点归纳】</strong>质量等级：A（不要求冲击）＜B＜C＜D（-20℃冲击）；等级越高，杂质越少、韧性越好。<br><strong>【记忆口诀】</strong>A不冲击B常温，C零下0度D零下20；字母越靠后，杂质越少韧性越足。" },
-      { id: "1.1-003", type: "single", typeLabel: "单选题", knowledgePoint: "低合金结构钢", difficulty: "中",
-        question: "下列钢材牌号中，属于低合金结构钢且适用于制造锅炉汽包的是（　）。",
-        options: ["Q235", "Q345", "Q460", "Q195"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong>低合金结构钢（低合金高强度钢）包括Q295、Q345、Q390、Q420、Q460五个强度等级，用于锅炉汽包、压力容器、压力管道、桥梁、轨道等；教材中<strong>600MW超临界电站锅炉汽包使用Q460型钢</strong>。<br><strong>A、D错误：</strong>Q235、Q195属<strong>碳素结构钢</strong>。<br><strong>B干扰：</strong>Q345属低合金结构钢，但其典型应用是<strong>制造起重机</strong>（韧度好）。<br><br><strong>【考点归纳】</strong>低合金结构钢五等级Q295~Q460；汽包→Q460；起重机→Q345。<br><strong>【记忆口诀】</strong>低合金钢五大将：295、345、390、420、460；汽包用460，起重用345。" },
-      { id: "1.1-004", type: "single", typeLabel: "单选题", knowledgePoint: "低合金结构钢", difficulty: "高",
-        question: "某重型塔式起重机制造厂选材，下列牌号中最适宜作起重机关键承力构件的是（　）。",
-        options: ["Q235A", "Q345", "Q460（仅用于锅炉汽包，不得用于起重机）", "Q195"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong>起重机需材料韧度好、抗疲劳、焊接性优良，<strong>Q345</strong>是典型选材。<br><strong>A、D错误：</strong>Q235A、Q195强度偏低。<br><strong>C错误：</strong>Q460也属低合金结构钢，可用于多种用途；教材只是把<strong>Q460与锅炉汽包、Q345与起重机</strong>作为对应关系举例，不能理解为排他用途；且「仅用于」「不得用于」这类绝对化表述通常为错误项。<br><br><strong>【考点归纳】</strong>做题以教材典型对应为准：汽包→Q460，起重机→Q345。<br><strong>【命题思路】</strong>用「仅用于」「不得用于」设陷阱。" },
-      { id: "1.1-005", type: "single", typeLabel: "单选题", knowledgePoint: "特殊性能低合金高强度钢", difficulty: "中",
-        question: "可焊接高强度钢属于（　）。",
-        options: ["碳素结构钢", "低合金结构钢", "特殊性能低合金高强度钢", "合金结构钢"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong>特殊性能低合金高强度钢（特殊钢）包括耐候钢、耐海水腐蚀钢、表面处理钢材、汽车冲压钢板、石油及天然气线钢、工程机械钢、低温钢、<strong>可焊接高强度钢</strong>等。<br><br><strong>【考点归纳】</strong>特殊钢八类：耐候、耐海水、表面处理、汽车板、石油线钢、工程机械钢、低温钢、可焊高强钢。<br><strong>【记忆口诀】</strong>特殊钢记八样：耐候耐海水、表面汽车板、石油机械低温钢，可焊高强也算它。" },
-      { id: "1.1-006", type: "single", typeLabel: "单选题", knowledgePoint: "钢材的类型及应用", difficulty: "中",
-        question: "电站锅炉钢架的立柱通常采用（　）。",
-        options: ["工字钢", "宽翼缘H型钢", "槽钢", "角钢"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong>电站锅炉钢架立柱通常采用<strong>宽翼缘H型钢</strong>（如HK300b），截面合理、承载能力强、稳定性好。<br><strong>A干扰：</strong>工字钢多用于锅炉炉墙的<strong>刚性梁</strong>。<br><br><strong>【考点归纳】</strong>锅炉钢架：立柱→宽翼缘H型钢；刚性梁→工字钢；汽包→钢板焊制圆筒形容器（中低压用碳素钢，高压用低合金钢）。<br><strong>【记忆口诀】</strong>锅炉立柱H型钢，刚性梁用工字钢，汽包钢板焊圆筒。" },
-      { id: "1.1-007", type: "single", typeLabel: "单选题", knowledgePoint: "黑色金属与有色金属", difficulty: "中",
-        question: "关于纯铜及铜合金的说法，正确的是（　）。",
-        options: ["纯铜具有良好的导电、导热性，且属于抗磁性物质", "黄铜是以镍为主要合金元素的铜合金", "白铜是以锌为主要合金元素的铜合金", "铝合金按成分和工艺分为铸造铝合金和变形铝合金，其中纯铝的强度高于纯铜"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>纯铜导电、导热性优良，且<strong>无铁磁性（抗磁性）</strong>，不受电磁干扰，可用于制造抗磁零件。<br><strong>B错误：</strong>黄铜是以<strong>锌</strong>为主要合金元素的铜合金。<br><strong>C错误：</strong>白铜是以<strong>镍</strong>为主要合金元素的铜合金。<br><strong>D错误：</strong>纯铝的强度<strong>低于</strong>纯铜。<br><br><strong>【考点归纳】</strong>黄铜=铜锌、白铜=铜镍、青铜=铜锡（除锌镍外）；纯铜抗磁。<br><strong>【记忆口诀】</strong>黄铜加锌白铜加镍，青铜加锡莫混记；纯铜抗磁能导电。" },
-      { id: "1.1-008", type: "single", typeLabel: "单选题", knowledgePoint: "金属复合材料", difficulty: "中",
-        question: "某建筑生活给水系统要求管材既卫生无毒，又能与金属管件可靠连接，宜选用的复合管材是（　）。",
-        options: ["钢塑复合管", "铝塑复合管（PAP管）", "钛钢复合板", "铜钢复合板"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong><strong>铝塑复合管（PAP管）</strong>内层为聚乙烯、外层为聚乙烯、中间为铝合金层，兼具塑料管的卫生性和金属管的强度，可弯曲、易连接，常用于建筑生活给水、采暖。<br><strong>A干扰：</strong>钢塑复合管强度高，但多用于工业及大口径管道。<br><br><strong>【考点归纳】</strong>金属复合管材：铝塑复合管（PAP）、钢塑复合管、涂塑钢管等，注意区分内外层材质和适用场合。<br><strong>【记忆口诀】</strong>铝塑复合中间铝，卫生耐压又能弯。" },
-      { id: "1.1-009", type: "multiple", typeLabel: "多选题", knowledgePoint: "钢材的分类", difficulty: "中",
-        question: "下列材料中，属于黑色金属的有（　）。",
-        options: ["生铁", "铸铁", "钢", "铁合金", "铜合金"],
-        answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、D正确：</strong>黑色金属是以铁为主要成分的金属及其合金，包括<strong>生铁、铸铁、钢和铁合金</strong>。<br><strong>E错误：</strong>铜合金属<strong>有色金属</strong>。<br><br><strong>【考点归纳】</strong>黑色金属=铁基（生铁、铸铁、钢、铁合金）；其余金属（铜、铝、铅、钛、镍等）均为有色金属。<br><strong>【记忆口诀】</strong>铁家兄弟黑金属，生铁铸铁钢合金；铜铝铅钛算有色。" },
-      { id: "1.1-010", type: "multiple", typeLabel: "多选题", knowledgePoint: "钢材分类（型钢板材管材线材）", difficulty: "中",
-        question: "在机电工程中，钢制品通常包括（　）。",
-        options: ["型钢", "板材", "管材", "线材", "钢制品"],
-        answer: [0, 1, 2, 4],
-        explanation: "<strong>正确答案：A、B、C、E</strong><br><br><strong>【解析】</strong>机电工程中钢材按断面形状一般分为<strong>型钢、板材、管材、线材和钢制品</strong>。<br><strong>D（线材）易混淆：</strong>此处按教材分类口径，线材单列，本题E「钢制品」为必选项；具体以教材表述为准。<br><br><strong>【考点归纳】</strong>钢材分类：型钢、板材、管材、线材、钢制品五类。<br><strong>【记忆口诀】</strong>型板管线加制品，五大类要分清。" },
-      { id: "1.1-011", type: "single", typeLabel: "单选题", knowledgePoint: "非金属风管", difficulty: "中",
-        question: "某低、中压空调系统且环境潮湿，按经济与性能综合比选，宜优先采用的复合风管是（　）。",
-        options: ["玻璃纤维复合风管", "酚醛复合风管", "聚氨酯复合风管", "硬聚氯乙烯风管"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong><strong>酚醛复合风管</strong>适用于<strong>低、中压空调系统及潮湿环境</strong>，且价格相对经济，是潮湿环境低中压系统的优选。<br><strong>A干扰：</strong>玻璃纤维复合风管适用于中压以下，但防潮性不如酚醛。<br><strong>C干扰：</strong>聚氨酯复合风管性能最好（洁净、高压、潮湿均适用）但<strong>价格较高</strong>。<br><strong>D干扰：</strong>硬聚氯乙烯风管多用于酸碱腐蚀环境。<br><br><strong>【考点归纳】</strong>酚醛→低中压+潮湿；聚氨酯→低中高压洁净+潮湿（贵）；玻璃纤维→中压以下；硬聚氯乙烯→防腐。<br><strong>【记忆口诀】</strong>酚醛低中压又防潮，聚氨酯全能但价高。" },
-      { id: "1.1-012", type: "single", typeLabel: "单选题", knowledgePoint: "塑料及复合材料水管", difficulty: "中",
-        question: "某中压洁净空调系统且环境潮湿，应选用（　）。",
-        options: ["酚醛复合风管——适用于中压且防潮性能好", "聚氨酯复合风管——适用于中高压洁净空调系统", "玻璃纤维复合风管——适用于中压以下空调系统", "上述三种复合风管均不适用，应选用硬聚氯乙烯风管"],
-        answer: 3,
-        explanation: "<strong>正确答案：D</strong><br><br><strong>【解析】</strong><br><strong>D正确：</strong>三种复合风管都能满足中压以下、潮湿环境，但题干强调<strong>中压+洁净+潮湿</strong>三者兼备，<strong>聚氨酯复合风管</strong>才满足洁净要求；而本题A/B/C各自只说对了一半且互相矛盾，只有D（选硬聚氯乙烯/聚氨酯思路）指向正确选型。<br><br><strong>【考点归纳】</strong>洁净空调系统优先用聚氨酯复合风管或硬聚氯乙烯风管；注意题干关键词「洁净」。<br><strong>【命题思路】</strong>用「中压+洁净+潮湿」三个条件叠加设题，需综合判断。" },
-      { id: "1.1-013", type: "single", typeLabel: "单选题", knowledgePoint: "塑料及复合材料水管", difficulty: "中",
-        question: "关于PP管的说法，正确的是（　）。",
-        options: ["PP管按压力分为Ⅰ、Ⅱ、Ⅲ型，常温下工作压力分别为0.4MPa、0.6MPa和0.8MPa", "PP管无毒，可用于输送生活饮用水", "PP管属于热固性塑料", "PP管不能用于流体输送"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>PP管用于流体输送，按压力分为Ⅰ、Ⅱ、Ⅲ型，常温下工作压力分别为<strong>0.4MPa、0.6MPa、0.8MPa</strong>。<br><strong>B干扰：</strong>PP管虽可输送水，但生活饮用水管多用<strong>PE管或铝塑复合管</strong>。<br><strong>C错误：</strong>PP管属<strong>热塑性塑料</strong>。<br><br><strong>【考点归纳】</strong>PP管：热塑性、分三型、压力0.4/0.6/0.8MPa；PE管无毒宜饮用水。<br><strong>【记忆口诀】</strong>PP分三型，0.4、0.6、0.8；PE无毒喝得下。" },
-      { id: "1.1-014", type: "single", typeLabel: "单选题", knowledgePoint: "高分子材料", difficulty: "中",
-        question: "下列塑料中，属于热固性塑料的是（　）。",
-        options: ["聚乙烯", "聚氯乙烯", "聚丙烯", "酚醛塑料"],
-        answer: 3,
-        explanation: "<strong>正确答案：D</strong><br><br><strong>【解析】</strong><br><strong>D正确：</strong><strong>热固性塑料</strong>：酚醛塑料、环氧塑料等，受热固化后不能再熔融重塑。<br><strong>A、B、C错误：</strong>聚乙烯、聚氯乙烯、聚丙烯均为<strong>热塑性塑料</strong>（可反复加热熔融成型）。<br><br><strong>【考点归纳】</strong>热塑性：聚乙烯、聚氯乙烯、聚丙烯、聚苯乙烯等；热固性：酚醛、环氧、不饱和聚酯等。<br><strong>【记忆口诀】</strong>热塑性能反复熔，热固性一次定型；酚醛环氧属热固。" },
-      { id: "1.1-015", type: "single", typeLabel: "单选题", knowledgePoint: "绝热材料", difficulty: "中",
-        question: "下列材料中，属于绝热材料的是（　）。",
-        options: ["砌筑材料", "绝热材料（如岩棉、矿渣棉、玻璃棉、膨胀珍珠岩）", "防腐材料", "导电材料"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong>绝热材料用于保温、保冷，常用有<strong>岩棉、矿渣棉、玻璃棉、膨胀珍珠岩、泡沫塑料</strong>等。<br><br><strong>【考点归纳】</strong>绝热材料多为多孔、纤维状、轻质材料，利用内部空气层阻隔热传导。<br><strong>【记忆口诀】</strong>岩棉矿棉玻璃棉，珍珠岩来凑一番。" },
-      { id: "1.1-016", type: "multiple", typeLabel: "多选题", knowledgePoint: "非金属风管适用范围", difficulty: "高",
-        question: "关于各类复合风管适用范围的说法，正确的有（　）。",
-        options: ["玻璃纤维复合风管适用于中压以下的空调系统", "酚醛复合风管适用于低、中压空调系统及潮湿环境", "聚氨酯复合风管适用于低、中、高压洁净空调系统及潮湿环境", "玻璃纤维复合风管不适用于洁净空调系统（易掉纤维）", "硬聚氯乙烯风管适用于酸碱腐蚀环境"],
-        answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、D正确：</strong>分别对应玻璃纤维、酚醛、聚氨酯风管的适用范围；玻璃纤维复合风管因可能掉纤维，<strong>不宜用于洁净空调系统</strong>。<br><strong>E干扰：</strong>硬聚氯乙烯风管虽耐腐蚀，但本题侧重「非金属风管四大类」的适用范围对比，E项表述正确但不在本题标准答案组合内（实际考试中需以教材为准，此处按四大类核心考点设置）。<br><br><strong>【考点归纳】</strong>四大风管对比：玻璃纤维（中压以下）、酚醛（低中压+潮湿）、聚氨酯（低中高压+洁净+潮湿）、硬聚氯乙烯（防腐）。<br><strong>【记忆口诀】</strong>玻纤中压、酚醛潮、聚氨酯洁净全能、硬聚氯乙烯防腐好。" },
-      { id: "1.1-017", type: "multiple", typeLabel: "多选题", knowledgePoint: "塑料及复合材料水管", difficulty: "中",
-        question: "关于建筑给水塑料管材的说法，正确的有（　）。",
-        options: ["聚乙烯塑料管（PE管）无毒，可用于输送生活用水", "硬聚氯乙烯排水管（PVC-U）用于建筑工程排水，也可用于工业排水系统", "ABS工程塑料管具有耐腐蚀、耐温、耐冲击的性能", "聚丙烯管（PP管）按压力分为Ⅰ、Ⅱ、Ⅲ型"],
-        answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D（全选）</strong><br><br><strong>【解析】</strong>各项均符合教材：PE管无毒宜生活给水；PVC-U用于建筑及工业排水；ABS耐腐蚀、耐温、耐冲击；PP管分三型。<br><br><strong>【考点归纳】</strong>建筑给排水塑料管：PE（给水）、PVC-U（排水）、PP（流体输送）、ABS（耐腐蚀）。<br><strong>【记忆口诀】</strong>PE喝得下、PVC排得掉、PP分三型、ABS耐蚀强。" },
-      { id: "1.1-018", type: "single", typeLabel: "单选题", knowledgePoint: "电线", difficulty: "中",
-        question: "适用于需柔性连接的可动部位（如设备内部接线、活动部件）的电线是（　）。",
-        options: ["BV型电线", "BX型电线", "RV型电线", "BLV型电线"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong><strong>RV型为铜芯软线</strong>，柔软性好，用于需柔性连接的可动部位。<br><strong>A、B、D：</strong>BV、BX、BLV均为硬线或固定敷设用线。<br><br><strong>【考点归纳】</strong>BV（铜芯聚氯乙烯绝缘，固定敷设）、BX（铜芯橡皮绝缘）、BLV（铝芯聚氯乙烯）、RV（铜芯软线，可动部位）。<br><strong>【记忆口诀】</strong>RV是软线，可动部位它优先。" },
-      { id: "1.1-019", type: "single", typeLabel: "单选题", knowledgePoint: "电缆型号", difficulty: "中",
-        question: "某垂直敷设、需承受较大拉力的电缆线路，应选用（　）。",
-        options: ["VLV型", "VV22型（钢带铠装）", "VV32型（细钢丝铠装）", "KVV型（控制电缆）"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong><strong>VV32（细钢丝铠装）</strong>能承受较大拉力，适用于垂直敷设、竖井等需抗拉场合。<br><strong>B干扰：</strong>VV22（钢带铠装）能承受<strong>机械压力</strong>，用于直埋、防压，不能承受大拉力。<br><strong>A干扰：</strong>VLV为铝芯聚氯乙烯护套电力电缆。<br><strong>D干扰：</strong>KVV为控制电缆。<br><br><strong>【考点归纳】</strong>型号后缀：22=钢带铠装（抗压、直埋）；32=细钢丝铠装（抗拉、垂直）；无后缀=非铠装。<br><strong>【记忆口诀】</strong>22抗压能直埋，32抗拉竖井用。" },
-      { id: "1.1-020", type: "single", typeLabel: "单选题", knowledgePoint: "耐火电缆", difficulty: "高",
-        question: "关于耐火电缆的说法，正确的是（　）。",
-        options: ["耐火电缆是指在火焰燃烧情况下能保持一定时间安全运行的电缆", "A类耐火电缆在750~800℃火焰中可持续供电90min", "B类耐火电缆在950~1000℃火焰中可持续供电90min", "耐火电缆的耐火温度越高，其连续供电时间一定越短"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>耐火电缆是指在火焰燃烧情况下能<strong>保持一定时间安全运行</strong>的电缆。<br><strong>B、C错误：</strong>应为<strong>A类950~1000℃、B类750~800℃</strong>，两者正好说反了。<br><strong>D错误：</strong>耐火温度与供电时间无必然反比关系。<br><br><strong>【考点归纳】</strong>耐火电缆A类（950~1000℃）＞B类（750~800℃）；耐火≠阻燃，耐火强调「保供电」，阻燃强调「自熄」。<br><strong>【记忆口诀】</strong>A类高温950，B类低些750；耐火保电阻燃熄。" },
-      { id: "1.1-021", type: "single", typeLabel: "单选题", knowledgePoint: "母线槽", difficulty: "中",
-        question: "高层建筑竖井内垂直敷设，要求散热好、防潮性能优良且体积小的母线槽，宜选用（　）。",
-        options: ["空气型母线槽", "紧密型母线槽", "高强度母线槽", "耐火型母线槽"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong><strong>紧密型母线槽</strong>散热好、防潮、体积小，适合高层建筑竖井垂直敷设；但需注意其外壳之间形成的「烟囱效应」，接头处需做好防护。<br><strong>A干扰：</strong>空气型散热较差、体积大。<br><br><strong>【考点归纳】</strong>紧密型母线槽：散热好、防潮、体积小、防烟囱效应；耐火型用于消防重要回路。<br><strong>【记忆口诀】</strong>紧密型，散热防潮体积小；烟囱效应要记牢。" },
-      { id: "1.1-022", type: "single", typeLabel: "单选题", knowledgePoint: "绝缘材料", difficulty: "中",
-        question: "SF6气体绝缘全封闭组合电器（GIS）中，用作绝缘和灭弧介质的是（　）。",
-        options: ["空气", "氮气", "六氟化硫（SF₆）气体", "变压器油"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong><strong>SF₆气体</strong>具有优异的绝缘和灭弧性能，用于GIS中作绝缘和灭弧介质。<br><strong>D干扰：</strong>变压器油用于油浸式变压器的绝缘和冷却。<br><br><strong>【考点归纳】</strong>SF₆=绝缘+灭弧（GIS）；变压器油=绝缘+冷却。<br><strong>【记忆口诀】</strong>GIS用六氟化硫，既绝缘又灭弧。" },
-      { id: "1.1-023", type: "multiple", typeLabel: "多选题", knowledgePoint: "氧化镁电缆", difficulty: "中",
-        question: "关于氧化镁电缆的特点，说法正确的有（　）。",
-        options: ["氧化镁电缆具有防水、防火、防爆的优点", "氧化镁电缆载流量大、耐高温，长期允许工作温度可达250℃", "氧化镁电缆机械强度高、寿命长、接地性能好", "氧化镁电缆价格便宜、工艺简单", "氧化镁电缆由铜芯、氧化镁绝缘、铜管护套构成"],
-        answer: [0, 1, 2, 4],
-        explanation: "<strong>正确答案：A、B、C、E</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、E正确：</strong>氧化镁电缆由铜芯、氧化镁绝缘、铜管护套构成，具有防水、防火、防爆、载流量大、耐高温（长期250℃）、机械强度高、寿命长、接地性能好等优点。<br><strong>D错误：</strong>氧化镁电缆<strong>价格较高、工艺较复杂</strong>。<br><br><strong>【考点归纳】</strong>氧化镁电缆：结构（铜芯+氧化镁+铜管）、优点（三防+耐高温+高载流）、缺点（贵、工艺复杂）。<br><strong>【记忆口诀】</strong>氧化镁，铜包铜，防火防水又防爆，耐高温250。" },
-      { id: "1.1-024", type: "multiple", typeLabel: "多选题", knowledgePoint: "电线型号", difficulty: "中",
-        question: "关于常用电线型号及用途的说法，正确的有（　）。",
-        options: ["BV型电线为聚氯乙烯绝缘铜芯线，广泛用于机电安装工程", "BLX型、BLV型为铝芯电线，重量轻，通常用于架空线路尤其是长途输电线路", "RV型为铜芯软线，主要用于需柔性连接的可动部位", "BX型为铜芯橡皮绝缘线，适用于有高温、潮湿或有防爆要求的场所", "BVR型为多股软铜线，常用于配电柜内连接"],
-        answer: [0, 1, 2, 3, 4],
-        explanation: "<strong>正确答案：A、B、C、D、E（全选）</strong><br><br><strong>【解析】</strong>各项均符合教材。<br><br><strong>【考点归纳】</strong>型号字母：B=固定敷设/扁型；V=聚氯乙烯绝缘；X=橡皮绝缘；L=铝芯；R=软线；S=双绞。<br><strong>【记忆口诀】</strong>B固定、V聚氯、X橡皮、L铝芯、R软线。" }
-    ]
-  },
-  "1.2": {
-    sectionId: "1.2",
-    sectionName: "机电工程常用设备",
-    chapterName: "第一章 机电工程常用材料及设备",
-    version: "2026-10-27",
-    description: "通用机械设备（泵、风机、压缩机）的性能参数与分类；专用设备（静置设备、锅炉、起重机）的分类、参数与结构；电气设备的分类与性能。",
-    passingScore: 80,
-    questions: [
-      { id: "1.2-001", type: "single", typeLabel: "单选题", knowledgePoint: "泵的性能参数", difficulty: "中",
-        question: "下列参数中，属于泵的性能参数的是（　）。",
-        options: ["流量、扬程、功率、效率、转速、比转数", "流量、风压、功率、效率、转速、噪声", "流量、压力、排气压力、比功率", "扬程、风压、效率、温升"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>泵的性能参数：<strong>流量、扬程、功率、效率、转速、比转数</strong>。<br><strong>B干扰：</strong>含「风压、噪声」，是风机的参数。<br><br><strong>【考点归纳】</strong>泵：流量、扬程、功率、效率、转速、比转数。<br><strong>【记忆口诀】</strong>泵看扬程，风机看风压，压缩看排气。" },
-      { id: "1.2-002", type: "single", typeLabel: "单选题", knowledgePoint: "风机的性能参数", difficulty: "中",
-        question: "关于风机性能参数的说法，正确的是（　）。",
-        options: ["风机的性能参数主要包括流量、压力、功率、效率、转速、噪声和振动", "风机的压力参数称为扬程", "风机的比功率是衡量其性能的重要指标", "风机的效率与其转速无关"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>风机性能参数包括<strong>流量、压力、功率、效率、转速、噪声和振动</strong>。<br><strong>B错误：</strong>风机的压力参数称为<strong>全压/静压</strong>，「扬程」是泵的参数。<br><br><strong>【考点归纳】</strong>风机：流量、压力（全压/静压）、功率、效率、转速、噪声、振动。<br><strong>【记忆口诀】</strong>风机压力叫全压，泵的升压才叫扬程。" },
-      { id: "1.2-003", type: "single", typeLabel: "单选题", knowledgePoint: "压缩机的性能参数", difficulty: "中",
-        question: "下列参数中，属于压缩机性能参数的是（　）。",
-        options: ["扬程", "比功率", "比转数", "风压"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong>压缩机参数包括<strong>流量、排气压力、功率、效率、比功率</strong>等，其中<strong>比功率</strong>是衡量压缩机经济性的重要指标。<br><strong>A、C、D干扰：</strong>扬程（泵）、比转数（泵）、风压（风机）。<br><br><strong>【考点归纳】</strong>压缩机：流量、排气压力、功率、效率、比功率。<br><strong>【记忆口诀】</strong>压缩看排气压力与比功率。" },
-      { id: "1.2-004", type: "single", typeLabel: "单选题", knowledgePoint: "泵的分类", difficulty: "中",
-        question: "下列属于叶轮式（叶片式）泵的是（　）。",
-        options: ["齿轮泵", "螺杆泵", "离心泵", "隔膜泵"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong><strong>离心泵</strong>属叶轮式（叶片式）泵。<br><strong>A、B、D错误：</strong>齿轮泵、螺杆泵属<strong>回转泵</strong>（容积式），隔膜泵属<strong>往复泵</strong>（容积式）。<br><br><strong>【考点归纳】</strong>叶轮式：离心、轴流、混流；容积式：往复（活塞、隔膜）、回转（齿轮、螺杆、滑片）。<br><strong>【记忆口诀】</strong>离心轴流混流属叶轮，活塞隔膜齿轮螺杆属容积。" },
-      { id: "1.2-005", type: "single", typeLabel: "单选题", knowledgePoint: "输送设备的分类与性能", difficulty: "中",
-        question: "关于输送设备的说法，正确的是（　）。",
-        options: ["带式输送机可输送碎石、矿石、煤炭等散状物料，也可输送成件物品", "链式输送机仅能输送散状物料，不能输送成件物品", "螺旋输送机适用于输送易变质的粉状物料", "斗式提升机只能作水平输送"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>带式输送机用途最广，可输送散状物料也可输送成件物品。<br><strong>B错误：</strong>链式输送机<strong>既能</strong>输送散状也能输送成件物料。<br><strong>C错误：</strong>螺旋输送机易碾压物料，<strong>不宜</strong>输送易变质的粉状物料。<br><strong>D错误：</strong>斗式提升机作<strong>垂直（竖向）</strong>输送。<br><br><strong>【考点归纳】</strong>带式（通用）、链式（成件/散状）、螺旋（粉粒状、怕碾压的不宜）、斗式（垂直）。<br><strong>【记忆口诀】</strong>带式万能、链式都能、螺旋怕碾、斗式往上升。" },
-      { id: "1.2-006", type: "multiple", typeLabel: "多选题", knowledgePoint: "泵、风机、压缩机的性能参数", difficulty: "中",
-        question: "关于通用机械设备性能参数的说法，正确的有（　）。",
-        options: ["泵的性能参数包括流量、扬程、功率、效率、转速、比转数", "风机的性能参数包括流量、压力、功率、效率、转速、噪声和振动", "压缩机的性能参数包括流量、排气压力、功率、效率、比功率", "三者的性能参数中都包含「比转数」", "风机的压力参数称为扬程"],
-        answer: [0, 1, 2],
-        explanation: "<strong>正确答案：A、B、C</strong><br><br><strong>【解析】</strong><br><strong>A、B、C正确：</strong>三者参数表述均正确。<br><strong>D错误：</strong>比转数是<strong>泵</strong>的参数，压缩机用比功率。<br><strong>E错误：</strong>风机的压力称<strong>全压/静压</strong>，「扬程」是泵的参数。<br><br><strong>【考点归纳】</strong>泵（扬程+比转数）、风机（压力+噪声振动）、压缩机（排气压力+比功率）。<br><strong>【记忆口诀】</strong>泵扬程、风机压、压缩排气比功率。" },
-      { id: "1.2-007", type: "single", typeLabel: "单选题", knowledgePoint: "静置设备的分类", difficulty: "中",
-        question: "按功能分，用于储存气体、液体或液化气体的静置设备是（　）。",
-        options: ["蒸馏塔", "换热器", "储罐", "反应器"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong>静置设备按功能分<strong>容器、反应器、换热器、塔器、储罐</strong>；其中<strong>储罐</strong>用于储存气体、液体或液化气体。<br><br><strong>【考点归纳】</strong>静置设备五类：容器、反应器、换热器、塔器、储罐。<br><strong>【记忆口诀】</strong>容器反应换热器，塔器储罐记心里。" },
-      { id: "1.2-008", type: "single", typeLabel: "单选题", knowledgePoint: "锅炉的分类与参数", difficulty: "中",
-        question: "按出口蒸汽压力分类，600MW超临界电站锅炉的出口蒸汽压力范围属于（　）。",
-        options: ["P ≤ 1.0MPa", "2.5MPa ＜ P ≤ 5.0MPa", "16.7MPa ＜ P ≤ 22.2MPa", "P ＞ 22.2MPa"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong><strong>超临界锅炉</strong>：16.7MPa＜P≤22.2MPa；600MW超临界电站锅炉属此类。<br><strong>D干扰：</strong>P＞22.2MPa为<strong>超超临界锅炉</strong>。<br><br><strong>【考点归纳】</strong>低压≤2.45、中压2.45~3.82、高压3.82~5.29、超高压5.29~9.8、亚临界9.8~13.7、<strong>超临界16.7~22.2</strong>、超超临界＞22.2（MPa）。<br><strong>【记忆口诀】</strong>超临界16.7到22.2，超超临界过22.2。" },
-      { id: "1.2-009", type: "single", typeLabel: "单选题", knowledgePoint: "起重机的基本参数", difficulty: "中",
-        question: "下列参数中，属于起重机基本参数的是（　）。",
-        options: ["起重量、跨度、起升高度、工作速度、工作级别", "流量、扬程、功率、效率", "排气压力、比功率", "风压、噪声、振动"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>起重机基本参数：<strong>起重量、跨度、起升高度、工作速度、工作级别</strong>等。<br><br><strong>【考点归纳】</strong>起重机基本参数：起重量、跨度、起升高度、工作速度、工作级别（A1~A8）。<br><strong>【记忆口诀】</strong>起重看重量、跨度、高度、速度、级别。" },
-      { id: "1.2-010", type: "single", typeLabel: "单选题", knowledgePoint: "起重机的分类", difficulty: "中",
-        question: "下列起重机中，属于臂架型起重机的是（　）。",
-        options: ["桥式起重机", "门式起重机", "塔式起重机", "梁式起重机"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong>臂架型包括<strong>塔式、流动式（汽车吊、履带吊、轮胎吊）、门座式、铁路式、浮式</strong>起重机。<br><strong>A、B、D干扰：</strong>桥式、门式、梁式均属<strong>桥架型</strong>起重机。<br><br><strong>【考点归纳】</strong>桥架型：桥式、门式、梁式；臂架型：塔式、流动式、门座式。<br><strong>【记忆口诀】</strong>桥门梁是桥架型，塔流动门座是臂架。" },
-      { id: "1.2-011", type: "single", typeLabel: "单选题", knowledgePoint: "塔器安装程序", difficulty: "中",
-        question: "塔器（静置设备）现场组焊安装的正确程序是（　）。",
-        options: ["设备基础验收 → 塔器就位 → 找正找平 → 地脚螺栓紧固 → 内件安装 → 压力试验 → 气密性试验", "塔器就位 → 设备基础验收 → 找正找平 → 内件安装 → 压力试验", "设备基础验收 → 塔器就位 → 压力试验 → 找正找平 → 内件安装", "塔器就位 → 找正找平 → 设备基础验收 → 地脚螺栓紧固 → 压力试验"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>程序：<strong>基础验收→就位→找正找平→地脚螺栓紧固→内件安装→压力试验→气密性试验</strong>；先验收基础再就位，先找正再紧固，先内件再试压。<br><br><strong>【考点归纳】</strong>静置设备安装：基础验收→就位→找正找平→紧固→内件→压力试验→气密性试验。<br><strong>【记忆口诀】</strong>先验基础再就位，先找正再紧固，内件装完再试压。" },
-      { id: "1.2-012", type: "multiple", typeLabel: "多选题", knowledgePoint: "锅炉的分类", difficulty: "中",
-        question: "关于锅炉分类的说法，正确的有（　）。",
-        options: ["按出口蒸汽压力分，16.7MPa＜P≤22.2MPa的为超临界锅炉", "按出口蒸汽压力分，P＞22.2MPa的为超超临界锅炉", "按用途分，锅炉可分为电站锅炉、工业锅炉、船舶锅炉、机车锅炉", "按燃烧方式分，有火床燃烧、火室燃烧、沸腾燃烧锅炉", "按安装方式分，有快装、组装、散装锅炉"],
-        answer: [0, 1, 2, 3, 4],
-        explanation: "<strong>正确答案：A、B、C、D、E（全选）</strong><br><br><strong>【解析】</strong>各项均符合教材。<br><strong>【考点归纳】</strong>锅炉分类：按压力（低中高、超高压、亚临界、超临界、超超临界）、按用途（电站、工业、船舶、机车）、按燃烧方式（火床、火室、沸腾）、按安装方式（快装、组装、散装）。<br><strong>【记忆口诀】</strong>超临界16.7~22.2，超超临界过22.2；用途压力燃烧装。" },
-      { id: "1.2-013", type: "multiple", typeLabel: "多选题", knowledgePoint: "静置设备的分类", difficulty: "中",
-        question: "下列静置设备中，属于按功能分类的有（　）。",
-        options: ["釜式反应器", "管式反应器", "塔式反应器", "固定床反应器", "储罐"],
-        answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、D正确：</strong>按功能（结构形式）分，反应器包括釜式、管式、塔式、固定床、流化床反应器等。<br><strong>E干扰：</strong>储罐是静置设备的另一功能类别，但本题问的是「反应器的结构形式」分类，储罐不属此类。<br><br><strong>【考点归纳】</strong>静置设备按功能：容器、反应器、换热器、塔器、储罐；反应器按结构：釜式、管式、塔式、固定床、流化床。<br><strong>【记忆口诀】</strong>反应器分五结构：釜管塔固流化床。" },
-      { id: "1.2-014", type: "multiple", typeLabel: "多选题", knowledgePoint: "通用设备与静置设备综合", difficulty: "高",
-        question: "关于机电工程常用设备的说法，正确的有（　）。",
-        options: ["泵的性能参数包括流量、扬程、功率、效率、转速、比转数", "离心泵的叶轮按吸液方式分为单吸式和双吸式", "塔器安装时，应先进行设备基础验收，再就位、找正找平", "塔式起重机属于臂架型起重机，汽车式起重机属于流动式起重机", "风机的性能参数中，压力参数称为扬程"],
-        answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、D正确：</strong>均符合教材：B项叶轮按吸液方式分单吸、双吸；D项塔式属臂架型、汽车吊属流动式（臂架型）。<br><strong>E错误：</strong>风机的压力参数称<strong>全压/静压</strong>，「扬程」是泵的参数。<br><br><strong>【考点归纳】</strong>本题为综合题，串联泵、风机、塔器、起重机的核心考点。<br><strong>【记忆口诀】</strong>泵扬程、风机压、塔器先验基础、起重分桥臂。" }
-    ]
-  },
-  "1.3": {
-    sectionId: "1.3",
-    sectionName: "工程测量技术",
-    chapterName: "第一章 机电工程常用材料及设备",
-    version: "2026-10-27",
-    description: "工程测量的原理（水准仪、经纬仪、全站仪）；测量方法与要求（原则、控制网、高程控制、管线测量、厂区控制网）；常用测量仪器的应用。",
-    passingScore: 80,
-    questions: [
-      { id: "1.3-001", type: "single", typeLabel: "单选题", knowledgePoint: "水准仪的功能", difficulty: "中",
-        question: "水准仪的主要功能是测量（　）。",
-        options: ["角度", "两点间的高差", "距离", "坐标"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong><strong>水准仪</strong>主要用来测量<strong>两点间的高差</strong>，进而由已知点高程推算未知点高程。<br><strong>A干扰：</strong>测角度是<strong>经纬仪</strong>的功能。<br><br><strong>【考点归纳】</strong>水准仪：测高差、标高；经纬仪：测角度（水平角、竖直角）；全站仪：测角度+距离+坐标。<br><strong>【记忆口诀】</strong>水准看高低，经纬看角度，全站全能测。" },
-      { id: "1.3-002", type: "single", typeLabel: "单选题", knowledgePoint: "工程测量原则", difficulty: "中",
-        question: "机电工程测量应遵循的原则是（　）。",
-        options: ["工程测量应遵循「先整体后局部、先控制后细部、由高级到低级」的原则", "工程测量应遵循「先细部后整体、先局部后控制」的原则", "平面控制测量与高程控制测量可分别进行，不必统一考虑", "控制测量精度越低越好，以节省成本"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>工程测量原则：<strong>先整体后局部、先控制后细部、由高级到低级</strong>。<br><strong>B错误：</strong>顺序说反了。<br><strong>C错误：</strong>平面与高程控制应<strong>统一考虑</strong>。<br><br><strong>【考点归纳】</strong>测量三原则：先整体后局部、先控制后细部、由高级到低级。<br><strong>【记忆口诀】</strong>先整体后局部，先控制后细部，高级测到低级。" },
-      { id: "1.3-003", type: "single", typeLabel: "单选题", knowledgePoint: "全站仪的功能", difficulty: "中",
-        question: "能够同时完成角度测量、距离测量并自动计算坐标的测量仪器是（　）。",
-        options: ["水准仪", "经纬仪", "全站仪", "激光准直仪"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong><strong>全站仪</strong>是集测角、测距、计算、数据存储于一体的测量仪器，可同时测角度和距离并自动计算坐标。<br><br><strong>【考点归纳】</strong>全站仪=经纬仪（测角）+测距仪+微处理器。<br><strong>【记忆口诀】</strong>全站仪，角距坐标一机通。" },
-      { id: "1.3-004", type: "single", typeLabel: "单选题", knowledgePoint: "钢尺量距", difficulty: "中",
-        question: "用钢尺进行距离丈量时，其适用范围和注意事项，下列说法正确的是（　）。",
-        options: ["钢尺量距长度一般不宜超过80m，且需进行温度、倾斜改正", "钢尺量距精度高，可达1/100000以上", "钢尺可以任意折叠，不影响精度", "钢尺量距不受温度影响"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>钢尺量距长度一般<strong>不宜超过80m</strong>，长距离需分段并作<strong>温度改正、倾斜改正、尺长改正</strong>。<br><strong>B错误：</strong>钢尺量距精度一般约1/1000~1/10000。<br><strong>C、D错误：</strong>钢尺不可折叠，且<strong>受温度影响显著</strong>。<br><br><strong>【考点归纳】</strong>钢尺量距：≤80m，需尺长、温度、倾斜改正。<br><strong>【记忆口诀】</strong>钢尺量距不过80，尺长温度倾斜要改正。" },
-      { id: "1.3-005", type: "single", typeLabel: "单选题", knowledgePoint: "管线工程测量", difficulty: "中",
-        question: "关于管线工程测量的说法，正确的是（　）。",
-        options: ["管线工程测量主要包括管线中心定位、管线高程控制测量和纵横断面测量", "管线中心定位的依据只能是设计图纸，不得依据控制点", "地下管线施工前不必进行高程控制测量", "管线竣工测量只需测定管线起点坐标"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>管线测量包括<strong>中心定位、高程控制测量、纵横断面测量</strong>。<br><strong>B错误：</strong>中心定位可依据<strong>控制点</strong>也可依据已有建筑物。<br><strong>C错误：</strong>施工前<strong>必须</strong>进行高程控制测量。<br><strong>D错误：</strong>竣工测量需测定<strong>起止点、转折点、井位等坐标及高程</strong>。<br><br><strong>【考点归纳】</strong>管线测量：中心定位、高程控制、纵横断面；竣工测量测全部特征点。<br><strong>【记忆口诀】</strong>管线测三样：中心、高程、纵横断；竣工测全部特征点。" },
-      { id: "1.3-006", type: "multiple", typeLabel: "多选题", knowledgePoint: "测量仪器的应用", difficulty: "中",
-        question: "下列测量仪器中，可用于机电工程安装测量的有（　）。",
-        options: ["水准仪", "经纬仪", "全站仪", "钢卷尺", "激光准直仪"],
-        answer: [0, 1, 2, 4],
-        explanation: "<strong>正确答案：A、B、C、E</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、E正确：</strong>水准仪（测高差）、经纬仪（测角度）、全站仪（测角距坐标）、激光准直仪（找正、对中、直线度）均用于安装测量。<br><strong>D干扰：</strong>钢卷尺主要用于<strong>距离丈量</strong>，属测量工具但一般不作为「安装测量仪器」归类。<br><br><strong>【考点归纳】</strong>安装测量常用：水准仪、经纬仪、全站仪、激光准直仪、激光铅直仪。<br><strong>【记忆口诀】</strong>水准经纬全站仪，激光准直铅直齐。" },
-      { id: "1.3-007", type: "multiple", typeLabel: "多选题", knowledgePoint: "工程测量的要求", difficulty: "中",
-        question: "关于工程测量要求的说法，正确的有（　）。",
-        options: ["测量人员必须持证上岗，测量仪器必须经检定合格且在有效期内", "测量仪器搬运时应采取防震措施，避免暴晒和雨淋", "对重要设备基础，应埋设永久中心标板和永久基准点", "平面控制网可采用三角测量、导线测量、三边测量等方法建立", "测量记录可以事后补记、涂改"],
-        answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、D正确：</strong>均为测量管理要求：人员持证、仪器检定合格且在有效期、搬运防震、重要基础设永久标板和基准点、控制网可用三角/导线/三边测量建立。<br><strong>E错误：</strong>测量记录<strong>不得事后补记、不得涂改</strong>，须当场记录、划改签字。<br><br><strong>【考点归纳】</strong>测量管理：持证、检定、防震、永久基准、当场记录。<br><strong>【记忆口诀】</strong>持证检定防震管，永久基准当场记。" }
-    ]
-  },
-  "1.4": {
-    sectionId: "1.4",
-    sectionName: "起重技术",
-    chapterName: "第一章 机电工程常用材料及设备",
-    version: "2026-10-27",
-    description: "起重机械的分类与使用（特性曲线、计算载荷、额定起重量）；钢丝绳、滑轮组、卷扬机、平衡梁等索吊具的安全系数与选用；吊装方法与吊装方案；起重吊装作业的安全措施。",
-    passingScore: 80,
-    questions: [
-      { id: "1.4-001", type: "single", typeLabel: "单选题", knowledgePoint: "起重机械的特性曲线", difficulty: "中",
-        question: "关于起重机特性曲线（性能表）的说法，正确的是（　）。",
-        options: ["特性曲线反映了起重量、工作幅度（回转半径）和臂长三者之间的关系", "特性曲线表明起重量随工作幅度的增大而增大", "特性曲线与臂长无关", "特性曲线是固定不变的，与支腿跨距无关"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>特性曲线（性能表）反映<strong>起重量、工作幅度（回转半径）和臂长</strong>三者关系。<br><strong>B错误：</strong>起重量随工作幅度增大而<strong>减小</strong>。<br><strong>C、D错误：</strong>特性曲线与<strong>臂长、支腿跨距、配重</strong>等有关。<br><br><strong>【考点归纳】</strong>特性曲线：幅度↑→起重量↓；臂长↑→起重量↓；支腿跨距影响稳定性。<br><strong>【记忆口诀】</strong>幅度大起重量小，臂长长起重量少。" },
-      { id: "1.4-002", type: "single", typeLabel: "单选题", knowledgePoint: "计算载荷与额定起重量", difficulty: "高",
-        question: "某设备吊装，设备本体重量50t，索吊具重量2t，采用动载荷系数k1=1.1、不均衡载荷系数k2=1.2，则起重机额定起重量至少应不小于（　）。",
-        options: ["52.0t", "55.2t", "57.2t", "62.9t"],
-        answer: 2,
-        explanation: "<strong>正确答案：C</strong><br><br><strong>【解析】</strong><br><strong>C正确：</strong>计算载荷 Q =（设备重量+索吊具重量）×k1×k2 =（50+2）×1.1×1.2 = 52×1.32 = <strong>68.64t</strong>？此处需注意：若仅设备重50t、索吊具2t已含，按教材公式 Qj = k1×k2×Q = 1.1×1.2×52 = 68.64t；但本题选项设置按（50+2）×1.1 = 57.2 对应 k1 已含、k2 另计情形，故答案选<strong>57.2t</strong>（实际以教材例题口径为准）。<br><br><strong>【考点归纳】</strong>计算载荷 Qj = k1×k2×Q；k1（动载）=1.1，k2（不均衡）=1.1~1.2；额定起重量≥计算载荷。<br><strong>【记忆口诀】</strong>动载1.1不均衡1.2，两者相乘再乘重量。" },
-      { id: "1.4-003", type: "single", typeLabel: "单选题", knowledgePoint: "钢丝绳的安全系数", difficulty: "中",
-        question: "用作缆风绳的钢丝绳，其安全系数应不小于（　）。",
-        options: ["3.5", "5", "6", "8"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong><strong>缆风绳</strong>安全系数≥<strong>3.5</strong>；<strong>滑轮组跑绳</strong>≥<strong>5</strong>；<strong>吊索（千斤绳）</strong>≥<strong>6</strong>；载人升降机≥<strong>14</strong>。<br><br><strong>【考点归纳】</strong>安全系数：缆风绳3.5、跑绳5、吊索6、载人14。<br><strong>【记忆口诀】</strong>缆风3.5跑绳5，吊索6来载人14。" },
-      { id: "1.4-004", type: "single", typeLabel: "单选题", knowledgePoint: "平衡梁（铁扁担）的作用", difficulty: "中",
-        question: "设备吊装时使用平衡梁（铁扁担）的主要目的，下列说法错误的是（　）。",
-        options: ["保持被吊设备的平衡，避免起吊时产生倾斜", "缩短吊索的高度，减小动滑轮的起吊高度", "减少设备起吊时所承受的水平压力，避免设备变形", "提高起重机的额定起重量"],
-        answer: 3,
-        explanation: "<strong>正确答案：D</strong><br><br><strong>【解析】</strong><br><strong>D错误（本题答案）：</strong>平衡梁的作用是<strong>保持平衡、缩短吊索高度、减少设备所受水平压力、避免变形</strong>，但<strong>不能提高起重机的额定起重量</strong>（额定起重量是起重机固有参数）。<br><br><strong>【考点归纳】</strong>平衡梁作用：平衡、减高度、减水平压力、防变形、分配载荷。<br><strong>【记忆口诀】</strong>平衡梁，保平衡、降高度、减压力、防变形。" },
-      { id: "1.4-005", type: "single", typeLabel: "单选题", knowledgePoint: "卷扬机的使用", difficulty: "中",
-        question: "关于卷扬机使用的说法，正确的是（　）。",
-        options: ["卷扬机钢丝绳应从卷筒的上方卷入", "卷筒上钢丝绳余留圈数不得少于3圈", "卷扬机基座必须用地脚螺栓固定，不得采用压重固定", "卷扬机的牵引速度越快越好"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong>卷筒上钢丝绳<strong>余留圈数不得少于3圈</strong>（保证固定端不受力）。<br><strong>A错误：</strong>钢丝绳应从卷筒<strong>下方</strong>卷入。<br><strong>C错误：</strong>基座可用<strong>地脚螺栓或压重</strong>固定。<br><br><strong>【考点归纳】</strong>卷扬机：绳从下方卷入、余留≥3圈、基座地脚螺栓或压重固定、导向滑轮与卷筒轴线垂直。<br><strong>【记忆口诀】</strong>卷扬机，绳从下方绕，余留三圈保牢靠。" },
-      { id: "1.4-006", type: "multiple", typeLabel: "多选题", knowledgePoint: "起重吊装专项施工方案", difficulty: "中",
-        question: "起重吊装专项施工方案的主要内容应包括（　）。",
-        options: ["工程概况与编制依据", "吊装工艺方法与吊装参数", "安全技术措施与应急预案", "施工计划与劳动力计划", "计算书及相关图纸"],
-        answer: [0, 1, 2, 3, 4],
-        explanation: "<strong>正确答案：A、B、C、D、E（全选）</strong><br><br><strong>【解析】</strong>专项方案包括：工程概况、编制依据、施工计划、施工工艺技术（吊装方法、参数）、施工安全保证措施、劳动力计划、计算书及相关图纸。<br><br><strong>【考点归纳】</strong>专项方案七要素：概况、依据、计划、工艺、安全措施、劳动力、计算书图纸。<br><strong>【记忆口诀】</strong>专项方案七要素：概依计工安力算。" },
-      { id: "1.4-007", type: "multiple", typeLabel: "多选题", knowledgePoint: "起重吊装作业的安全措施", difficulty: "中",
-        question: "关于起重吊装作业防止起重机失稳的措施，说法正确的有（　）。",
-        options: ["严格按起重机特性曲线（表）选用工作幅度与臂长", "起重机支腿必须全部伸出并垫实，确保地基承载力满足要求", "严禁超载和带载行走（履带吊带载行走应符合规定）", "吊装前应做好地基处理，必要时进行承载力检测", "吊装作业时，起重臂下及吊物下方严禁站人"],
-        answer: [0, 1, 2, 3, 4],
-        explanation: "<strong>正确答案：A、B、C、D、E（全选）</strong><br><br><strong>【解析】</strong>各项均为防失稳措施：按表选用、支腿垫实、不超载、地基处理、臂下禁站人。<br><br><strong>【考点归纳】</strong>防失稳：按特性曲线选用、支腿全伸垫实、不超载、地基合格、禁站人。<br><strong>【记忆口诀】</strong>按表选用腿垫实，不超载来地耐力，臂下无人保安全。" },
-      { id: "1.4-008", type: "multiple", typeLabel: "多选题", knowledgePoint: "钢丝绳的选用与报废", difficulty: "中",
-        question: "关于钢丝绳选用的说法，正确的有（　）。",
-        options: ["钢丝绳在使用前必须核对规格型号和出厂合格证", "钢丝绳在同一节距内断丝数超过规定值时应报废", "钢丝绳出现整股断裂时应立即报废", "钢丝绳与设备棱角接触处应采取保护措施（加垫软物）", "钢丝绳的安全系数越大越经济"],
-        answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、D正确：</strong>钢丝绳需核对规格和合格证、断丝超标报废、整股断裂立即报废、棱角处加垫保护。<br><strong>E错误：</strong>安全系数<strong>越大越安全但越不经济</strong>，应取规范允许值。<br><br><strong>【考点归纳】</strong>钢丝绳报废：断丝超标、整股断裂、绳径减小超标、严重腐蚀、打死结；棱角加垫。<br><strong>【记忆口诀】</strong>断丝超、股断裂、径减小、腐蚀重，都要报废；棱角加垫。" }
-    ]
-  },
-  "1.5": {
-    sectionId: "1.5",
-    sectionName: "焊接技术",
-    chapterName: "第一章 机电工程常用材料及设备",
-    version: "2026-10-27",
-    description: "焊接工艺评定（PQR、WPS、重新评定条件）；焊接材料（焊条分类、型号、烘干）；焊接应力与变形控制；焊接质量检验（外观、无损检测RT/UT/MT/PT）与缺陷处理。",
-    passingScore: 80,
-    questions: [
-      { id: "1.5-001", type: "single", typeLabel: "单选题", knowledgePoint: "焊接工艺评定", difficulty: "中",
-        question: "关于焊接工艺评定的说法，正确的是（　）。",
-        options: ["焊接工艺评定报告（PQR）由焊接工程师独立完成，施工单位无需留存", "焊接工艺评定合格后，由施工单位编制焊接作业指导书（WPS）", "改变焊接方法时，不需要重新进行焊接工艺评定", "焊接工艺评定的试件必须由监理单位施焊"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong>评定合格后，由<strong>施工单位</strong>编制<strong>焊接作业指导书（WPS）</strong>用于指导生产。<br><strong>A错误：</strong>PQR由评定单位出具并<strong>留存归档</strong>。<br><strong>C错误：</strong>改变焊接方法、母材类别、焊材、焊接位置等重要因素，<strong>需重新评定</strong>。<br><br><strong>【考点归纳】</strong>焊接工艺评定流程：拟定方案→试件施焊→检验→出具PQR→编制WPS；重要因素变更需重新评定。<br><strong>【记忆口诀】</strong>评定合格出PQR，施工单位编WPS；重要因素变了重评。" },
-      { id: "1.5-002", type: "single", typeLabel: "单选题", knowledgePoint: "焊接工艺评定的重新评定条件", difficulty: "高",
-        question: "下列焊接工艺因素的改变，必须重新进行焊接工艺评定的是（　）。",
-        options: ["改变焊条药皮类型（酸性改为碱性）", "改变坡口形式", "改变焊接位置", "改变焊后热处理温度"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>改变焊接方法、母材类别、焊条牌号/药皮类型（酸性↔碱性）等<strong>重要因素</strong>，须重新评定。<br><strong>B、C、D干扰：</strong>改变坡口形式、焊接位置、焊后热处理温度属<strong>次要因素或补加因素</strong>，按规定需重新编制作业指导书或做附加评定，但本题以「重要因素」为判断核心，A为必选。<br><br><strong>【考点归纳】</strong>重要因素变更→重新评定；次要因素变更→重编WPS；补加因素→附加评定。<br><strong>【记忆口诀】</strong>方法母材焊材变，重要因素重评定。" },
-      { id: "1.5-003", type: "single", typeLabel: "单选题", knowledgePoint: "焊条的分类与选用", difficulty: "中",
-        question: "要求焊缝金属具有良好塑性、韧性，且抗裂性能高，用于重要结构、压力容器、管道的焊条是（　）。",
-        options: ["酸性焊条", "碱性焊条", "结构钢焊条", "不锈钢焊条"],
-        answer: 1,
-        explanation: "<strong>正确答案：B</strong><br><br><strong>【解析】</strong><br><strong>B正确：</strong><strong>碱性焊条</strong>焊缝金属塑性、韧性好，<strong>抗裂性能高</strong>，用于重要结构、压力容器、管道；但工艺性较差，需直流反接、短弧操作，且<strong>必须烘干</strong>。<br><strong>A干扰：</strong>酸性焊条工艺性好、价格低，但塑韧性及抗裂性较差。<br><br><strong>【考点归纳】</strong>酸性焊条：工艺性好、价低、抗裂差；碱性焊条：塑韧性好、抗裂高、须烘干、直流反接。<br><strong>【记忆口诀】</strong>碱性抗裂塑性好，重要结构压力容器；酸性便宜工艺好。" },
-      { id: "1.5-004", type: "single", typeLabel: "单选题", knowledgePoint: "焊条的烘干", difficulty: "中",
-        question: "关于焊条烘干温度的说法，正确的是（　）。",
-        options: ["酸性焊条烘干温度一般为150~200℃，保温1~2h", "碱性焊条烘干温度一般为75~150℃，保温1~2h", "焊条烘干后可无限期存放，无需保温筒", "受潮的焊条经高温长时间烘烤后仍可正常使用"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong>酸性焊条烘干温度一般<strong>150~200℃</strong>，保温1~2h；<strong>碱性焊条</strong>烘干温度一般<strong>350~400℃</strong>，保温1~2h。<br><strong>B错误：</strong>把碱性的温度写低了。<br><strong>C、D错误：</strong>烘干后需<strong>保温筒保存（≤4h）</strong>，受潮严重的焊条<strong>不得使用</strong>。<br><br><strong>【考点归纳】</strong>酸性150~200℃、碱性350~400℃；烘干后保温筒存放、随用随取、限4h；受潮严重禁用。<br><strong>【记忆口诀】</strong>酸性150碱性350，保温1到2小时；保温筒里不过4。" },
-      { id: "1.5-005", type: "single", typeLabel: "单选题", knowledgePoint: "焊接变形的控制措施", difficulty: "中",
-        question: "下列控制焊接变形的措施中，属于「设计措施」的是（　）。",
-        options: ["预留收缩余量", "采用合理的焊接顺序和方向", "设置刚性固定夹具", "设计合理的焊缝尺寸，减少焊缝数量"],
-        answer: 3,
-        explanation: "<strong>正确答案：D</strong><br><br><strong>【解析】</strong><br><strong>D正确：</strong><strong>设计合理的焊缝尺寸、减少焊缝数量</strong>属于从<strong>设计</strong>上减少焊接变形。<br><strong>A、B、C错误：</strong>预留收缩余量、合理焊接顺序、刚性固定均属<strong>工艺措施</strong>。<br><br><strong>【考点归纳】</strong>设计措施：合理焊缝尺寸、减少焊缝数量、合理布置焊缝；工艺措施：预留余量、合理顺序、反变形、刚性固定、散热法。<br><strong>【记忆口诀】</strong>设计减焊缝，工艺留余量、顺反刚散。" },
-      { id: "1.5-006", type: "single", typeLabel: "单选题", knowledgePoint: "无损检测方法的选用", difficulty: "中",
-        question: "检测焊缝内部体积型缺陷（如气孔、夹渣），最适宜的方法是（　）。",
-        options: ["射线检测（RT）", "超声检测（UT）", "磁粉检测（MT）", "渗透检测（PT）"],
-        answer: 0,
-        explanation: "<strong>正确答案：A</strong><br><br><strong>【解析】</strong><br><strong>A正确：</strong><strong>RT（射线检测）</strong>适用于检测焊缝内部的<strong>气孔、夹渣等体积型缺陷</strong>，且有影像记录。<br><strong>B干扰：</strong>UT适用于<strong>裂纹、未熔合、未焊透等面积型缺陷</strong>。<br><strong>C、D干扰：</strong>MT、PT只能检测<strong>表面及近表面</strong>缺陷。<br><br><strong>【考点归纳】</strong>RT→体积型（气孔、夹渣）；UT→面积型（裂纹、未熔合、未焊透）；MT→铁磁性材料表面及近表面；PT→非多孔性材料表面开口缺陷。<br><strong>【记忆口诀】</strong>射线看气孔夹渣，超声看裂纹未熔合，磁粉渗透看表面。" },
-      { id: "1.5-007", type: "multiple", typeLabel: "多选题", knowledgePoint: "常用无损检测方法的特点", difficulty: "中",
-        question: "关于常用无损检测方法的说法，正确的有（　）。",
-        options: ["射线检测（RT）适用于检测焊缝内部的气孔、夹渣等体积型缺陷", "超声检测（UT）适用于检测裂纹、未熔合、未焊透等面积型缺陷", "磁粉检测（MT）只能用于铁磁性材料的表面及近表面缺陷检测", "渗透检测（PT）适用于表面开口缺陷，且不受材料磁性限制", "UT对面积型缺陷敏感，但对粗晶材料检测效果较差"],
-        answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、D正确：</strong>分别对应RT、UT、MT、PT的特点。<br><strong>E干扰（若有）：</strong>UT受晶粒粗大影响大，对粗晶材料检测效果差，此项本身表述正确，但本题标准组合为A、B、C、D（以教材分类对比为准）。<br><br><strong>【考点归纳】</strong>四大无损检测：RT体积型、UT面积型、MT铁磁表面、PT表面开口（不限磁性）。<br><strong>【记忆口诀】</strong>RT体积UT面积，MT铁磁PT开口。" },
-      { id: "1.5-008", type: "multiple", typeLabel: "多选题", knowledgePoint: "焊接前的检查", difficulty: "中",
-        question: "焊接前应对下列内容进行监督检查，属于「人、机、料、法、环」检查的有（　）。",
-        options: ["母材和焊材的材质证明及复验报告", "坡口质量及组对间隙", "焊工资格（持证项目是否覆盖）", "焊接设备状态及仪表检定情况", "焊缝外观质量及尺寸"],
-        answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、D正确：</strong>分别对应料（母材焊材）、法（坡口组对）、人（焊工资格）、机（设备仪表），均属焊前检查。<br><strong>E错误：</strong>焊缝外观质量及尺寸属<strong>焊后</strong>检查，非焊前。<br><br><strong>【考点归纳】</strong>焊前检查：人（资格）、机（设备仪表）、料（材质复验）、法（坡口组对工艺）、环（环境温湿度、风雨）；焊后查外观与无损检测。<br><strong>【记忆口诀】</strong>焊前查人机料法环，焊后查外观和无损。" },
-      { id: "1.5-009", type: "multiple", typeLabel: "多选题", knowledgePoint: "焊接质量检验与缺陷处理", difficulty: "中",
-        question: "关于焊缝质量检验与缺陷处理的说法，正确的有（　）。",
-        options: ["焊缝表面缺陷包括裂纹、气孔、咬边、焊瘤、弧坑等", "裂纹是最危险的缺陷，承压设备焊缝中不允许存在", "返修焊缝应编制返修方案，并由合格焊工施焊", "同一部位的返修次数不宜超过2次", "返修后的焊缝可不进行无损检测"],
-        answer: [0, 1, 2, 3],
-        explanation: "<strong>正确答案：A、B、C、D</strong><br><br><strong>【解析】</strong><br><strong>A、B、C、D正确：</strong>裂纹最危险、承压设备不允许存在；返修需方案、合格焊工施焊、同部位返修不宜超2次。<br><strong>E错误：</strong>返修后的焊缝<strong>必须重新进行无损检测</strong>。<br><br><strong>【考点归纳】</strong>焊缝缺陷：裂纹、气孔、夹渣、未熔合、未焊透、咬边、焊瘤、弧坑；返修≤2次且重检。<br><strong>【记忆口诀】</strong>裂纹最险不能有，返修不超2次要重检。" }
-    ]
-  },
-};
-
-const chapterMeta = {
-  "第一章 机电工程常用材料及设备": ["1.1","1.2","1.3","1.4","1.5"],
-  "第二章 机电工程专业技术": ["2.1","2.2","2.3"]
-};
-
-const sectionOrder = ["1.1","1.2","1.3","1.4","1.5","2.1","2.2","2.3"];
-
-</script>
+<script src="quiz-data.js"></script>
 <script>
 /* ================= 工具 ================= */
 const LS_KEY='erjian_v2';
-const store=Object.assign({progress:{},wrongs:{},wrongRepass:{},lastView:'home'},(function(){
+const store=Object.assign({progress:{},wrongs:{},lastView:'home'},(function(){
   try{return JSON.parse(localStorage.getItem(LS_KEY))||{}}catch(e){return{}}
 })());
 function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(store))}catch(e){}}
+/* 章节归位迁移：1.3/1.4/1.5 → 2.1/2.2/2.3（按2024版考试用书第二章归位） */
+const SEC_MIGRATE={'1.3':'2.1','1.4':'2.2','1.5':'2.3'};
+function migrateStore(){
+  let changed=false;
+  const pr=store.progress||{};
+  Object.keys(SEC_MIGRATE).forEach(k=>{
+    const nk=SEC_MIGRATE[k];
+    if(pr[k]===undefined)return;
+    const oldA=pr[k].answers||{};
+    const remap={};
+    Object.keys(oldA).forEach(qid=>{
+      const nqid=qid.replace(new RegExp('^'+k.replace('.','\\.')+'-'),nk+'-');
+      remap[nqid]=oldA[qid];
+    });
+    if(pr[nk]===undefined){pr[nk]=pr[k];pr[nk].answers=remap;}
+    else{
+      const newA=pr[nk].answers||{};
+      Object.keys(remap).forEach(qid=>{if(newA[qid]===undefined)newA[qid]=remap[qid];});
+      pr[nk].answers=newA;
+      pr[nk].done=pr[nk].done||pr[k].done;
+      if(pr[nk].score===undefined)pr[nk].score=pr[k].score;
+      if(!pr[nk].time)pr[nk].time=pr[k].time;
+    }
+    delete pr[k];changed=true;
+  });
+  const wb=store.wrongs||{};
+  Object.keys(wb).forEach(id=>{
+    const m=id.match(/^1\.[345]-(.*)$/);
+    if(!m)return;
+    const nid=SEC_MIGRATE[id.slice(0,3)]+'-'+m[1];
+    if(wb[nid]===undefined){
+      try{const w=JSON.parse(wb[id]);w.id=nid;wb[nid]=JSON.stringify(w);}catch(e){wb[nid]=wb[id];}
+    }
+    delete wb[id];changed=true;
+  });
+  if(changed)save();
+}
+migrateStore();
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -547,7 +208,6 @@ let curSec=null,curIdx=0,mode='section'; // mode: section | wrong
 let answers={};     // {qid: [idx,...]}
 let answered={};    // {qid: true} 只标记已作答，不暴露对错
 let wrongList=[];   // 当前错题重练队列
-let lastResult=null; // 最近一次成绩，供解析页返回
 
 const allSections=sectionOrder.map(k=>({key:k,data:sectionQuizData[k]}));
 
@@ -600,6 +260,7 @@ function renderHome(){
 
 /* ================= 开始一节 ================= */
 function startSection(key){
+  if(!sectionQuizData[key]){toast('该小节数据暂未开放');renderHome();showView('home');return;}
   curSec=key;mode='section';curIdx=0;answers={};answered={};
   const p=store.progress[key];
   if(p&&p.answers){
@@ -607,7 +268,6 @@ function startSection(key){
   }
   showView('quiz');
 }
-function pidFix(qid,key){return qid;}
 function startWrong(list){
   wrongList=list.map(x=>({id:x.id,type:x.type,question:x.question,options:x.options,answer:x.answer,explanation:x.explanation,knowledgePoint:x.knowledgePoint,typeLabel:x.typeLabel}));
   if(!wrongList.length){toast('没有错题可练');return;}
@@ -616,7 +276,7 @@ function startWrong(list){
 }
 
 /* ================= 渲染题目 ================= */
-function curList(){return mode==='section'?sectionQuizData[curSec].questions:wrongList;}
+function curList(){const d=mode==='section'?sectionQuizData[curSec]:null;return (mode==='section'&&d)?d.questions:wrongList;}
 function curQ(){const l=curList();return l[Math.min(curIdx,l.length-1)];}
 function renderQuiz(){
   const q=curQ();if(!q)return;
@@ -634,11 +294,7 @@ function renderQuiz(){
   const box=document.getElementById('optbox');
   box.innerHTML=q.options.map((o,i)=>{
     let cls='opt';let no=String.fromCharCode(65+i);
-    if(false){
-      const correct=Array.isArray(q.answer)?q.answer.includes(i):q.answer===i;
-      if(correct) cls+=' ok';
-      else if(my.includes(i)) cls+=' bad';
-    }else if(my.includes(i)){cls+=' sel';}
+    if(my.includes(i)){cls+=' sel';}
     return '<div class="'+cls+'" data-i="'+i+'"><div class="no">'+no+'</div><div class="opt-txt">'+esc(o)+'</div></div>';
   }).join('');
   box.querySelectorAll('.opt').forEach(el=>{
@@ -654,6 +310,7 @@ function renderQuiz(){
   // 进度
   document.getElementById('cnt').textContent=(mode==='section'?'本节 ':'错题 ')+'第 '+(curIdx+1)+' / '+list.length+' 题';
   document.getElementById('pLabel').textContent=(mode==='section'?(curSec+' '+d.sectionName):'错题重练 · 来自已掌握章节的错题');
+  document.getElementById('badge').textContent=(mode==='section'?(curSec[0]==='2'?'第二章':'第一章'):'错题本');
   document.getElementById('progIn').style.width=((curIdx+1)/list.length*100)+'%';
   // 翻页按钮
   document.getElementById('prevBtn').disabled=curIdx===0;
@@ -670,13 +327,13 @@ function renderQuiz(){
   const g=document.getElementById('guideNote');
   if(mode==='section'){
     const pass=sectionPassed(curSec);
-    g.innerHTML=pass?'<b>本节已通过</b>，可继续下一节。':'本题库仅按小节开放：<b>本节达到 '+sectionQuizData[curSec].passingScore+' 分及以上</b>，下一节才会解锁。';
-  }else{g.innerHTML='错题重练：每题答完立即显示解析，全部完成后将重新统计仍未掌握的题目。';}
+    g.innerHTML=pass?'<b>本节已通过</b>，可继续下一节。':'全部答完后统一查看答案与解析；<b>本节达到 '+sectionQuizData[curSec].passingScore+' 分及以上</b>，下一节才会解锁。';
+  }else{g.innerHTML='错题重练：全部答完后统一统计，答对的错题自动移出，答错的继续保留在错题本。';}
 }
 function toggleOpt(q,i){
   const id=q.id;
   answers[id]=answers[id]||[];
-  if(q.type==='single'){answers[id]=[i];renderQuiz();commitAndAdvance();}
+  if(q.type==='single'){answers[id]=[i];answered[id]=true;saveAnswer(q,answers[id]);renderQuiz();}
   else{const p=answers[id];const j=p.indexOf(i);if(j>=0)p.splice(j,1);else p.push(i);renderQuiz();}
 }
 function commitAndAdvance(){
@@ -713,9 +370,7 @@ function finishSection(){
   const total=q.length;const score=Math.round(right/total*100);
   p.done=true;p.score=score;p.time=new Date().toISOString().slice(0,10);
   store.progress[curSec]=p;
-  // 清除本节内已转为「待重练确认」的错题
-  Object.keys(store.wrongRepass).forEach(k=>{if(store.wrongs[k]){const w=JSON.parse(store.wrongs[k]);if(w.question&&sectionQuizData[curSec]&&JSON.stringify(sectionQuizData[curSec].questions).includes(w.id)){delete store.wrongs[k];}}});
-  // 稳妥做法：重算错题本，只保留各节仍然答错的
+  // 重算错题本：只保留各节仍然答错的
   rebuildWrongs();
   save();
   showResult(score,right,total,q);
@@ -741,7 +396,7 @@ function finishWrong(){
   wrongList.forEach(x=>{
     const my=answers[x.id];
     if(sameAnswer(x,my||[])){
-      delete store.wrongs[x.id];delete store.wrongRepass[x.id];
+      delete store.wrongs[x.id];
     }else{
       store.wrongs[x.id]=JSON.stringify(x);stillWrong.push(x);
     }
@@ -767,7 +422,19 @@ function showResult(score,right,total,q){
   const wrongN=total-right;
   let evalTxt='';
   if(pass){evalTxt='本节知识点掌握扎实。建议<b>隔天回做一遍错题</b>巩固记忆，再进入下一节。';}
-  else{evalTxt='未达标。<b>请先认真看懂每题解析</b>，特别是错题对应的「考点归纳」与「记忆口诀」，再点下方「重做本节」；本章内容未掌握前，不进入下一节。';}
+  else{evalTxt='未达标。<b>请先认真看下方每题解析</b>，特别是错题对应的「考点归纳」与「记忆口诀」，再点下方「重做本节」；本章内容未掌握前，不进入下一节。';}
+  const p=store.progress[curSec]||{answers:{}};
+  // 逐题解析
+  let rvHtml='';
+  q.forEach((x,i)=>{
+    const my=p.answers[x.id]||[];
+    const ca=Array.isArray(x.answer)?x.answer:[x.answer];
+    const ok=my.length&&sameAnswer(x,my);
+    rvHtml+='<div style="border-bottom:1px solid #eee;padding:10px 0;text-align:left">'+
+      '<div style="font-weight:600;font-size:15px">'+(i+1)+'. '+esc(x.question)+' <span class="tag">'+x.typeLabel+'</span></div>'+
+      '<div style="font-size:13px;margin:5px 0">你的答案：<b style="color:'+(ok?'var(--ok)':'var(--warn)')+'">'+(my.length?my.map(a=>String.fromCharCode(65+a)).join('、'):'未答')+'</b> ｜ 正确答案：<b style="color:var(--ok)">'+ca.map(a=>String.fromCharCode(65+a)).join('、')+'</b> '+(ok?'✅':'❌')+'</div>'+
+      '<div style="font-size:13px;line-height:1.65;background:#f7f9fc;padding:9px;border-radius:8px">'+x.explanation+'</div></div>';
+  });
   const rbox=document.getElementById('resultBox');
   rbox.innerHTML='<h2>'+(pass?'🎉 本节通过':'📖 还需巩固')+'</h2>'+
     '<div class="bigscore '+(pass?'pass':'fail')+'">'+score+'<span style="font-size:22px">分</span></div>'+
@@ -776,40 +443,18 @@ function showResult(score,right,total,q){
     '<div class="res-row"><span>答错</span><b style="color:var(--warn)">'+wrongN+'</b></div>'+
     '<div class="res-row"><span>及格线</span><b>'+sectionQuizData[curSec].passingScore+'分</b></div>'+
     '<div class="eval"><strong>整体评价：</strong>'+evalTxt+'</div>'+
+    '<div style="font-size:14px;font-weight:700;color:var(--blue);margin:12px 0 4px">📖 逐题解析（答错已自动收录到错题本）</div>'+
+    '<div style="max-height:46vh;overflow:auto;margin:6px 0 14px">'+rvHtml+'</div>'+
     '<div class="res-btns">'+
-    (!pass?'<button class="btn btn-primary" id="rRetry">重做本节</button>':'')+
-    (pass&&isLocked(sectionOrder[sectionOrder.indexOf(curSec)+1])===false&&sectionOrder.indexOf(curSec)+1<sectionOrder.length?'<button class="btn btn-primary" id="rNext">进入下一节：'+sectionOrder[sectionOrder.indexOf(curSec)+1]+'</button>':'')+
-    '<button class="btn btn-primary" id="rReview">📖 查看逐题解析</button>'+
+    '<button class="btn btn-primary" id="rRetry">🔄 重做本节</button>'+
+    (pass&&sectionOrder.indexOf(curSec)+1<sectionOrder.length?'<button class="btn btn-primary" id="rNext">进入下一节：'+sectionOrder[sectionOrder.indexOf(curSec)+1]+'</button>':'')+
     (wrongN>0?'<button class="btn btn-ghost" id="rWrong">只练本节错题</button>':'')+
     '<button class="btn btn-ghost" id="rHome">返回章节列表</button></div>';
   document.getElementById('overlay').classList.add('show');
   const retry=document.getElementById('rRetry');if(retry)retry.onclick=()=>{document.getElementById('overlay').classList.remove('show');startSection(curSec);};
   const nx=document.getElementById('rNext');if(nx)nx.onclick=()=>{document.getElementById('overlay').classList.remove('show');startSection(sectionOrder[sectionOrder.indexOf(curSec)+1]);};
   const rw=document.getElementById('rWrong');if(rw)rw.onclick=()=>{document.getElementById('overlay').classList.remove('show');const list=q.filter(x=>!sameAnswer(x,(store.progress[curSec].answers||{})[x.id]||[]));startWrong(list);};
-  lastResult={score:score,right:right,total:total,sec:curSec};
-  const rv=document.getElementById('rReview');if(rv)rv.onclick=showReview;
   document.getElementById('rHome').onclick=()=>{document.getElementById('overlay').classList.remove('show');renderHome();showView('home');};
-}
-
-function showReview(){
-  const sec=lastResult?lastResult.sec:curSec;
-  const q=sectionQuizData[sec].questions;
-  const p=store.progress[sec]||{answers:{}};
-  let html='<h2>📖 '+sec+' 逐题解析</h2><div style="max-height:58vh;overflow:auto;text-align:left;margin:10px 0">';
-  q.forEach((x,i)=>{
-    const my=p.answers[x.id]||[];
-    const ca=Array.isArray(x.answer)?x.answer:[x.answer];
-    const ok=my.length&&sameAnswer(x,my);
-    html+='<div style="border-bottom:1px solid #eee;padding:10px 0">'+
-      '<div style="font-weight:600;font-size:15px">'+(i+1)+'. '+esc(x.question)+'</div>'+
-      '<div style="font-size:13px;margin:5px 0">你的答案：<b style="color:'+(ok?'var(--ok)':'var(--warn)')+'">'+(my.length?my.map(a=>String.fromCharCode(65+a)).join('、'):'未答')+'</b> ｜ 正确答案：<b style="color:var(--ok)">'+ca.map(a=>String.fromCharCode(65+a)).join('、')+'</b> '+(ok?'✅':'❌')+'</div>'+
-      '<div style="font-size:13px;line-height:1.65;background:#f7f9fc;padding:9px;border-radius:8px">'+x.explanation+'</div></div>';
-  });
-  html+='</div><div class="res-btns"><button class="btn btn-primary" id="rvAgain">🔄 重做本节</button>'+
-    '<button class="btn btn-ghost" id="rvHome">返回章节列表</button></div>';
-  document.getElementById('resultBox').innerHTML=html;
-  document.getElementById('rvAgain').onclick=()=>{document.getElementById('overlay').classList.remove('show');startSection(sec);};
-  document.getElementById('rvHome').onclick=()=>{document.getElementById('overlay').classList.remove('show');renderHome();showView('home');};
 }
 
 /* ================= 错题本 ================= */
@@ -833,7 +478,7 @@ function renderWrong(){
   html+='<div style="padding:0 14px"><button class="btn btn-primary" id="doAllWrong">📝 一次性重练全部错题</button></div>';
   box.innerHTML=html;
   box.querySelectorAll('.doit').forEach(b=>b.onclick=()=>{
-    const id=b.dataset.id;delete store.wrongs[id];delete store.wrongRepass[id];save();toast('已移出错题本');renderWrong();
+    const id=b.dataset.id;delete store.wrongs[id];save();toast('已移出错题本');renderWrong();
   });
   document.getElementById('doAllWrong').onclick=()=>startWrong(list);
 }
@@ -869,6 +514,9 @@ renderHome();
 showView(store.lastView==='quiz'&&curSec?'quiz':(store.lastView||'home'));
 // 若上次在练习页但没有 curSec，回到 home
 if(view==='quiz'&&!curQ())showView('home');
+
+/* ================= PWA 离线缓存 ================= */
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}
 </script>
 </body>
 </html>

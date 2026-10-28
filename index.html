@@ -534,7 +534,7 @@ function renderWrong(){
 }
 
 /* ================= 练题模式（每题即时判对错） ================= */
-let pList=[],pIdx=0,pResults={},pRange='',pSel={};
+let pList=[],pIdx=0,pResults={},pRange='',pSel={},pSx=null;
 function renderPracticeHome(){
   const box=document.getElementById('v-practice-home');
   const wbN=Object.keys(store.wrongs).length;
@@ -613,6 +613,15 @@ function renderPractice(){
   prev.onclick=()=>{pIdx--;renderPractice();window.scrollTo(0,0);};
   document.getElementById('pNext').onclick=()=>{if(pIdx<pList.length-1){pIdx++;renderPractice();window.scrollTo(0,0);}else{endPractice();}};
   document.getElementById('pBack').onclick=()=>{showView('practice-home');renderPracticeHome();};
+  // 左右滑动切换题目
+  box.ontouchstart=e=>{pSx=e.touches[0].clientX;};
+  box.ontouchend=e=>{
+    if(pSx===null)return;
+    const dx=e.changedTouches[0].clientX-pSx;
+    if(dx<-45&&pIdx<pList.length-1){pIdx++;renderPractice();window.scrollTo(0,0);}
+    else if(dx>45&&pIdx>0){pIdx--;renderPractice();window.scrollTo(0,0);}
+    pSx=null;
+  };
   if(!done){
     box.querySelectorAll('#pOptBox .opt').forEach(el=>el.onclick=()=>{
       const i=el.dataset.i|0;

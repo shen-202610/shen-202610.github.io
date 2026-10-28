@@ -208,6 +208,7 @@ let curSec=null,curIdx=0,mode='section'; // mode: section | wrong
 let answers={};     // {qid: [idx,...]}
 let answered={};    // {qid: true} 只标记已作答，不暴露对错
 let wrongList=[];   // 当前错题重练队列
+let multiTimer=null; // 多选自动翻页计时器
 
 const allSections=sectionOrder.map(k=>({key:k,data:sectionQuizData[k]}));
 
@@ -303,10 +304,9 @@ function renderQuiz(){
   // 解析
   const exp=document.getElementById('exp');
   exp.classList.remove('show');exp.innerHTML='';
-  // 按钮
+  // 按钮（已改为选完自动翻页，确认按钮不再显示）
   const cBtn=document.getElementById('confirmBtn');
-  if(q.type==='single'){cBtn.style.display='none';}
-  else{cBtn.style.display='block';cBtn.disabled=my.length<2;cBtn.textContent='确认提交（已选 '+my.length+' 项）';}
+  cBtn.style.display='none';
   // 进度
   document.getElementById('cnt').textContent=(mode==='section'?'本节 ':'错题 ')+'第 '+(curIdx+1)+' / '+list.length+' 题';
   document.getElementById('pLabel').textContent=(mode==='section'?(curSec+' '+d.sectionName):'错题重练 · 来自已掌握章节的错题');
@@ -327,26 +327,39 @@ function renderQuiz(){
   const g=document.getElementById('guideNote');
   if(mode==='section'){
     const pass=sectionPassed(curSec);
-    g.innerHTML=pass?'<b>本节已通过</b>，可继续下一节。':'全部答完后统一查看答案与解析；<b>本节达到 '+sectionQuizData[curSec].passingScore+' 分及以上</b>，下一节才会解锁。';
+    g.innerHTML=pass?'<b>本节已通过</b>，可继续下一节。':'全部答完后统一查看答案与解析；单选点选即自动下一题，多选勾满 2 项自动下一题。<b>本节达到 '+sectionQuizData[curSec].passingScore+' 分及以上</b>，下一节才会解锁。';
   }else{g.innerHTML='错题重练：全部答完后统一统计，答对的错题自动移出，答错的继续保留在错题本。';}
 }
 function toggleOpt(q,i){
   const id=q.id;
   answers[id]=answers[id]||[];
-  if(q.type==='single'){answers[id]=[i];answered[id]=true;saveAnswer(q,answers[id]);renderQuiz();}
-  else{const p=answers[id];const j=p.indexOf(i);if(j>=0)p.splice(j,1);else p.push(i);renderQuiz();}
+  if(q.type==='single'){
+    // 单选：点选即记录并自动翻页（350ms 内仍可改选）
+    answers[id]=[i];answered[id]=true;saveAnswer(q,answers[id]);renderQuiz();
+    clearTimeout(multiTimer);
+    setTimeout(()=>{if(curQ()===q){advanceNow();}},350);
+  }else{
+    const p=answers[id];const j=p.indexOf(i);
+    if(j>=0)p.splice(j,1);else p.push(i);
+    renderQuiz();
+    // 多选：勾满 2 项后停止点击 900ms 自动翻页（可继续加选）
+    if(p.length>=2){
+      clearTimeout(multiTimer);
+      multiTimer=setTimeout(()=>{if(curQ()===q&&answers[id]&&answers[id].length>=2){advanceNow();}},900);
+    }
+  }
 }
-function commitAndAdvance(){
+function advanceNow(){
   const q=curQ();const my=answers[q.id]||[];
-  if(!my.length){toast('请先选择答案');return;}
+  if(!my.length){return;}
   answered[q.id]=true;
   saveAnswer(q,my);
   const list=curList();
   if(curIdx<list.length-1){
     const nxt=curIdx+1;
-    setTimeout(()=>{if(curIdx===nxt-1){curIdx=nxt;renderQuiz();window.scrollTo(0,0);}},350);
+    setTimeout(()=>{if(curIdx===nxt-1){curIdx=nxt;renderQuiz();window.scrollTo(0,0);}},280);
   }else{
-    setTimeout(()=>{if(curIdx===list.length-1)finishSection();},450);
+    setTimeout(()=>{if(curIdx===list.length-1)finishSection();},380);
   }
 }
 function saveAnswer(q,my){
@@ -354,11 +367,6 @@ function saveAnswer(q,my){
     const p=store.progress[curSec]||{answers:{}};
     p.answers[q.id]=my;store.progress[curSec]=p;save();
   }
-}
-function confirmAnswer(){
-  const q=curQ();const my=answers[q.id]||[];
-  if(q.type==='multiple'&&my.length<2){toast('多选题至少选 2 项');return;}
-  commitAndAdvance();
 }
 function finishSection(){
   if(mode==='wrong'){finishWrong();return;}
@@ -458,6 +466,64 @@ function showResult(score,right,total,q){
 }
 
 /* ================= 错题本 ================= */
+let wbList=[],wbIdx=0; // 错题单题页状态
+function openWb(list,idx){
+  wbList=list.slice();wbIdx=idx;renderWb();document.getElementById('overlay').classList.add('show');
+}
+function renderWb(){
+  const x=wbList[wbIdx];
+  const ca=Array.isArray(x.answer)?x.answer:[x.answer];
+  const ansTxt=ca.map(a=>String.fromCharCode(65+a)).join('、');
+  const opts=x.options.map((o,i)=>{
+    const ok=ca.includes(i);
+    return '<div class="opt'+(ok?' ok':'')+'"><div class="no">'+String.fromCharCode(65+i)+'</div><div class="opt-txt">'+esc(o)+'</div></div>';
+  }).join('');
+  const rbox=document.getElementById('resultBox');
+  rbox.innerHTML='<div style="text-align:left">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
+      '<span class="tag">📌 错题 '+(wbIdx+1)+' / '+wbList.length+'</span>'+
+      '<span class="tag'+(x.type==='multiple'?' multi':'')+'">'+esc(x.typeLabel)+'</span>'+
+    '</div>'+
+    '<div style="max-height:56vh;overflow:auto;padding-right:4px;-webkit-overflow-scrolling:touch">'+
+      '<div class="qmeta" style="margin:2px 0 4px">'+
+        '<span class="tag kp">'+esc(x.knowledgePoint||'')+'</span>'+
+        '<span class="tag diff">'+esc(x.difficulty||'')+'</span>'+
+      '</div>'+
+      '<div style="font-size:16px;font-weight:600;line-height:1.7;margin:4px 0 12px">'+esc(x.question)+'</div>'+
+      opts+
+      '<div style="margin-top:12px;padding:11px 13px;border-radius:12px;background:#eefaf3;font-size:14px;color:var(--ok);font-weight:600">✅ 正确答案：'+ansTxt+'</div>'+
+      '<div style="margin-top:10px;padding:13px;border-radius:12px;background:#f7f9fc;border-left:4px solid var(--blue);font-size:14px;line-height:1.75">'+x.explanation+'</div>'+
+    '</div>'+
+    '<div style="display:flex;gap:8px;margin-top:12px">'+
+      '<button class="btn btn-ghost" id="wbPrev" style="flex:1">← 上一题</button>'+
+      '<button class="btn btn-ghost" id="wbDel" style="flex:1.4">✅ 我会了</button>'+
+      '<button class="btn btn-primary" id="wbNext" style="flex:1">下一题 →</button>'+
+    '</div>'+
+    '<div style="margin-top:10px"><button class="btn btn-ghost" id="wbClose" style="width:100%">返回错题本</button></div>'+
+  '</div>';
+  const pEl=document.getElementById('wbPrev');pEl.disabled=wbIdx===0;if(pEl.disabled)pEl.style.opacity=.4;else pEl.style.opacity=1;
+  const nEl=document.getElementById('wbNext');nEl.disabled=wbIdx===wbList.length-1;if(nEl.disabled)nEl.style.opacity=.4;else nEl.style.opacity=1;
+  pEl.onclick=()=>{wbIdx--;renderWb();};
+  nEl.onclick=()=>{wbIdx++;renderWb();};
+  document.getElementById('wbClose').onclick=()=>{document.getElementById('overlay').classList.remove('show');renderWrong();showView('wrong');};
+  document.getElementById('wbDel').onclick=()=>{
+    const id=x.id;delete store.wrongs[id];save();toast('已移出错题本');
+    wbList.splice(wbIdx,1);
+    if(!wbList.length){document.getElementById('overlay').classList.remove('show');renderWrong();showView('wrong');return;}
+    if(wbIdx>=wbList.length)wbIdx=wbList.length-1;
+    renderWb();
+  };
+  // 左右滑动切换题目
+  let sx=null;
+  rbox.ontouchstart=e=>{sx=e.touches[0].clientX;};
+  rbox.ontouchend=e=>{
+    if(sx===null)return;
+    const dx=e.changedTouches[0].clientX-sx;
+    if(dx<-45&&wbIdx<wbList.length-1){wbIdx++;renderWb();}
+    else if(dx>45&&wbIdx>0){wbIdx--;renderWb();}
+    sx=null;
+  };
+}
 function renderWrong(){
   const box=document.getElementById('v-wrong');
   const list=Object.keys(store.wrongs).map(k=>JSON.parse(store.wrongs[k]));
@@ -465,21 +531,19 @@ function renderWrong(){
     box.innerHTML='<div class="empty"><div class="ico">🎯</div>错题本是空的<br>答错的题目会自动收集到这里<br>掌握了再移除，直到全部清零</div>';
     return;
   }
-  let html='<div class="guide-note">共 <b>'+list.length+'</b> 道待巩固错题。建议每次复习后点「我会了」，做对即移出错题本。</div>';
+  let html='<div class="guide-note">共 <b>'+list.length+'</b> 道待巩固错题。点任意一题可单题翻看解析（上下滚动、左右切题）；点「我会了」移出错题本。</div>';
   list.forEach((x,i)=>{
     const ca=Array.isArray(x.answer)?x.answer:[x.answer];
     const ansTxt=ca.map(a=>String.fromCharCode(65+a)).join('、');
-    html+='<div class="wb-item"><div class="from">'+esc(x.typeLabel)+' · '+esc(x.knowledgePoint||'')+'</div>'+
+    html+='<div class="wb-item" data-idx="'+i+'"><div class="from">'+esc(x.typeLabel)+' · '+esc(x.knowledgePoint||'')+'</div>'+
       '<div class="qt">'+esc(x.question)+'</div>'+
       '<div class="ans">✅ 正确答案：'+ansTxt+'</div>'+
-      '<div class="ex">'+x.explanation+'</div>'+
       '<button class="btn btn-ghost doit" data-id="'+x.id+'">我会了，移出错题本</button></div>';
   });
   html+='<div style="padding:0 14px"><button class="btn btn-primary" id="doAllWrong">📝 一次性重练全部错题</button></div>';
   box.innerHTML=html;
-  box.querySelectorAll('.doit').forEach(b=>b.onclick=()=>{
-    const id=b.dataset.id;delete store.wrongs[id];save();toast('已移出错题本');renderWrong();
-  });
+  box.querySelectorAll('.doit').forEach(b=>b.onclick=e=>{e.stopPropagation();const id=b.dataset.id;delete store.wrongs[id];save();toast('已移出错题本');renderWrong();});
+  box.querySelectorAll('.wb-item').forEach(el=>el.onclick=()=>openWb(list,el.dataset.idx|0));
   document.getElementById('doAllWrong').onclick=()=>startWrong(list);
 }
 
@@ -499,7 +563,6 @@ function showView(v){
 }
 
 /* ================= 事件 ================= */
-document.getElementById('confirmBtn').onclick=confirmAnswer;
 document.getElementById('prevBtn').onclick=()=>{if(curIdx>0){curIdx--;renderQuiz();window.scrollTo(0,0);}};
 document.getElementById('nextBtn').onclick=()=>{
   const list=curList();

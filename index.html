@@ -31,8 +31,9 @@ header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--
 .tag.done{background:#e9ecef;color:#495057}
 .tag.err{background:#fdecea;color:var(--warn)}
 .qtext{font-size:15.5px;font-weight:600;line-height:1.6;margin:4px 0 12px}
-.opt{border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;margin-bottom:8px;cursor:pointer;transition:.15s;display:flex;gap:8px;align-items:flex-start;user-select:none}
-.opt .no{flex:none;width:20px;height:20px;border-radius:50%;background:var(--bg);color:var(--sub);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px}
+.opt{border:1.5px solid var(--line);border-radius:8px;padding:6px 9px;margin-bottom:4px;cursor:pointer;transition:.15s;display:flex;gap:6px;align-items:flex-start;user-select:none}
+.opt .no{flex:none;width:18px;height:18px;border-radius:50%;background:var(--bg);color:var(--sub);display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;margin-top:1px}
+.opt .opt-txt{font-size:13.5px;line-height:1.5}
 .opt.sel{border-color:var(--blue);background:#f0f6ff}
 .opt.sel .no{background:var(--blue);color:#fff}
 .opt.ok{border-color:var(--ok);background:#eefaf3}
@@ -126,13 +127,14 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:14px 16px 28px;
     <span class="badge" id="badge">第一篇</span>
   </div>
   <div class="progress-outer"><div class="progress-inner" id="progIn"></div></div>
-  <div class="p-label" id="pLabel">第一篇 · 机电工程技术 —— 按小节逐一掌握</div>
+  <div class="p-label" id="pLabel">湖南二建考试科目 · 全部小节自由开放</div>
 </header>
 
 <div class="tabs">
   <div class="tab active" data-view="home">📚 章节</div>
   <div class="tab" data-view="practice-home">✍️ 练题</div>
   <div class="tab err" data-view="wrong">📌 错题本</div>
+  <div class="tab" data-view="record">📋 记录</div>
 </div>
 
 <div class="wrap">
@@ -169,6 +171,9 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:14px 16px 28px;
   <!-- 错题单题复习：独立页 -->
   <div id="v-wrong-detail" style="display:none"></div>
 
+  <!-- 做题记录（记忆功能） -->
+  <div id="v-record" style="display:none"></div>
+
 </div>
 
 <footer>数据按2024版教材知识点编写 · 题目与解析仅用于学习<br>本页自动保存在手机本地，重开可继续</footer>
@@ -183,7 +188,7 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:14px 16px 28px;
 <script>
 /* ================= 工具 ================= */
 const LS_KEY='erjian_v2';
-const store=Object.assign({progress:{},wrongs:{},lastView:'home'},(function(){
+const store=Object.assign({progress:{},wrongs:{},lastView:'home',history:[]},(function(){
   try{return JSON.parse(localStorage.getItem(LS_KEY))||{}}catch(e){return{}}
 })());
 function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(store))}catch(e){}}
@@ -249,11 +254,7 @@ function sameAnswer(q,a){ // a: [idx]
   const ca=Array.isArray(q.answer)?q.answer:[q.answer];
   return ca.length===a.length && ca.every(x=>a.includes(x));
 }
-function isLocked(key){
-  const list=sectionOrder;const i=list.indexOf(key);
-  if(i<=0) return false;
-  return !sectionPassed(list[i-1]);
-}
+function isLocked(){return false;} // 已取消顺序解锁：全部小节自由开放
 function renderHome(){
   const box=document.getElementById('v-home');
   let html='';
@@ -262,7 +263,7 @@ function renderHome(){
     chapterMeta[ch].forEach(key=>{
       const d=sectionQuizData[key];
       if(!d){return;}
-      const lock=isLocked(key);
+      const lock=false;
       const p=store.progress[key];
       let state,bar='';
       if(lock){state='<span class="ch-state st-lock">🔒 需先通过上一节</span>';}
@@ -278,7 +279,6 @@ function renderHome(){
   box.querySelectorAll('.chapter').forEach(el=>{
     el.onclick=()=>{
       const k=el.dataset.sec;
-      if(isLocked(k)){toast('请先通过上一节：'+sectionOrder[sectionOrder.indexOf(k)-1]);return;}
       startSection(k);
     };
   });
@@ -345,7 +345,7 @@ function renderQuiz(){
   // 提示
   const g=document.getElementById('guideNote');
   const pass=sectionPassed(curSec);
-  g.innerHTML=pass?'<b>本节已通过</b>，可继续下一节。':'全部答完后统一查看答案与解析；单选点选即自动下一题，多选勾满 2 项自动下一题。<b>本节达到 '+sectionQuizData[curSec].passingScore+' 分及以上</b>，下一节才会解锁。';
+  g.innerHTML=pass?'<b>本节已通过</b>，可继续下一节。':'全部答完后统一查看答案与解析；单选点选即自动下一题，多选勾满 2 项自动下一题。';
 }
 function toggleOpt(q,i){
   const id=q.id;
@@ -392,6 +392,15 @@ function finishSection(){
   const total=q.length;const score=Math.round(right/total*100);
   p.done=true;p.score=score;p.time=new Date().toISOString().slice(0,10);
   store.progress[curSec]=p;
+  // 记忆功能：记录本次每道已答题的作答
+  const hist=store.history||[];
+  const nowTs=new Date().toISOString();
+  q.forEach(x=>{
+    const my=p.answers[x.id];
+    if(my===undefined)return;
+    hist.push({ts:nowTs,sec:curSec,mode:'章节',qid:x.id,type:x.type,my:my.slice(),ok:sameAnswer(x,my)});
+  });
+  store.history=hist.slice(-3000);
   // 重算错题本：只保留各节仍然答错的
   rebuildWrongs();
   save();
@@ -420,7 +429,7 @@ function showResult(score,right,total,q){
   const wrongN=total-right;
   let evalTxt='';
   if(pass){evalTxt='本节知识点掌握扎实。建议<b>隔天回做一遍错题</b>巩固记忆，再进入下一节。';}
-  else{evalTxt='未达标。<b>请先认真看下方每题解析</b>，特别是错题对应的「考点归纳」与「记忆口诀」，再点下方「重做本节」；本章内容未掌握前，不进入下一节。';}
+  else{evalTxt='未达标。<b>请先认真看下方每题解析</b>，特别是错题对应的「考点归纳」与「记忆口诀」，再点下方「重做本节」巩固。';}
   const p=store.progress[curSec]||{answers:{}};
   // 逐题解析
   let rvHtml='';
@@ -667,6 +676,10 @@ function judgePractice(q,my){
     }
     save();
   }
+  // 记忆功能：记录每次练题作答
+  (store.history||(store.history=[])).push({ts:new Date().toISOString(),sec:pRange||'练题',mode:'练题',qid:q.id,type:q.type,my:(my||[]).slice(),ok:ok});
+  store.history=store.history.slice(-3000);
+  save();
   pResults[q.id]={ok:ok,my:(my||[]).slice(),added:added,streakTxt:streakTxt,streakGood:streakGood};
   delete pSel[q.id];
   renderPractice();
@@ -699,6 +712,40 @@ function endPractice(){
   if(ew)ew.onclick=()=>{document.getElementById('overlay').classList.remove('show');renderWrong();showView('wrong');};
 }
 
+/* ================= 做题记录（记忆功能） ================= */
+function renderRecord(){
+  const box=document.getElementById('v-record');
+  const hist=store.history||[];
+  const total=hist.length;
+  const okN=hist.filter(r=>r.ok).length;
+  const rate=total?Math.round(okN/total*100):0;
+  let html='<div class="guide-note">📋 做题记录：章节作答与练题判分每次都会记录在本机，用于回顾与统计正确率。记录仅存于浏览器本地。</div>';
+  html+='<div class="card"><div style="display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap">'+
+    '<div style="flex:1;min-width:80px;text-align:center"><div style="font-size:24px;font-weight:800;color:var(--blue)">'+total+'</div><div style="font-size:11.5px;color:var(--sub)">累计作答</div></div>'+
+    '<div style="flex:1;min-width:80px;text-align:center"><div style="font-size:24px;font-weight:800;color:var(--ok)">'+okN+'</div><div style="font-size:11.5px;color:var(--sub)">答对</div></div>'+
+    '<div style="flex:1;min-width:80px;text-align:center"><div style="font-size:24px;font-weight:800;color:'+(rate>=80?'var(--ok)':rate>=60?'#e6a23c':'var(--warn)')+'">'+rate+'%</div><div style="font-size:11.5px;color:var(--sub)">正确率</div></div>'+
+  '</div></div>';
+  if(!total){
+    html+='<div class="empty"><div class="ico">📋</div>还没有做题记录。完成一次章节作答或练题判分后，这里会自动记录每次答题情况。</div>';
+  }else{
+    html+='<div style="margin:12px 12px 2px;font-size:12.5px;color:var(--sub);font-weight:600">最近记录（倒序）</div>';
+    hist.slice().reverse().forEach(r=>{
+      const myT=(r.my||[]).map(a=>String.fromCharCode(65+a)).join('、');
+      const tm=new Date(r.ts);
+      const pad=n=>String(n).padStart(2,'0');
+      const badTm=isNaN(tm.getTime());
+      const tsTxt=badTm?'--':pad(tm.getMonth()+1)+'-'+pad(tm.getDate())+' '+pad(tm.getHours())+':'+pad(tm.getMinutes());
+      html+='<div class="wb-item" style="border-left-color:'+(r.ok?'var(--ok)':'var(--warn)')+'">'+
+        '<div class="from">'+tsTxt+' · '+(r.mode||'')+' · '+esc(String(r.sec||''))+' · 第 '+esc(String(r.qid||'').split('-').pop())+' 题 · '+(r.type==='multiple'?'多选':'单选')+'</div>'+
+        '<div class="ans" style="color:'+(r.ok?'var(--ok)':'var(--warn)')+'">'+(r.ok?'✅ 答对':'❌ 答错')+' · 你的答案：'+(myT||'未选')+'</div></div>';
+    });
+    html+='<div style="margin:12px"><button class="btn btn-ghost" id="clearHist" style="width:100%">🗑 清空做题记录</button></div>';
+  }
+  box.innerHTML=html;
+  const cb=document.getElementById('clearHist');
+  if(cb)cb.onclick=()=>{if(confirm('确定清空全部做题记录？')){store.history=[];save();renderRecord();toast('做题记录已清空');}};
+}
+
 /* ================= 视图切换 ================= */
 function showView(v){
   const sub=v==='wrong-detail'||v==='practice';
@@ -714,11 +761,13 @@ function showView(v){
   document.getElementById('v-practice').style.display=v==='practice'?'':'none';
   document.getElementById('v-wrong').style.display=v==='wrong'?'':'none';
   document.getElementById('v-wrong-detail').style.display=v==='wrong-detail'?'':'none';
+  document.getElementById('v-record').style.display=v==='record'?'':'none';
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
   store.lastView=v;save();
   if(v==='home')renderHome();
   if(v==='wrong')renderWrong();
   if(v==='practice-home')renderPracticeHome();
+  if(v==='record')renderRecord();
   if(v==='quiz')renderQuiz();
   window.scrollTo(0,0);
 }
